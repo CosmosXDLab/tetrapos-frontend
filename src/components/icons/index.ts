@@ -1,0 +1,12 @@
+export { default as HomeIcon } from "./HomeIcon";
+export { default as DashboardIcon } from "./DashboardIcon";
+export { default as LockClockIcon } from "./LockClockIcon";
+export { default as PeopleIcon } from "./PeopleIcon";
+export { default as SettingsIcon } from "./SettingsIcon";
+export { default as ShoppingCartIcon } from "./ShoppingCartIcon";
+export { default as ViewInArIcon } from "./ViewInArIcon";
+export { default as PlusIcon } from "./PlusIcon";
+export { default as TrashIcon } from "./TrashIcon";
+export { default as FilterIcon } from "./FilterIcon";
+export { default as MessageIcon } from "./MessageIcon";
+export { default as NotificationIcon } from "./NotificationIcon";
