@@ -3,16 +3,16 @@ import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { Calendar } from "../ui/calendar";
-import { useState } from "react";
 import { Label } from "../ui/label";
 
 interface CosmosCalendarProps {
-	id: string;
+	id?: string;
 	showLabel: boolean;
 	label?: string;
 	placeholder?: string;
 	required?: boolean;
-	onDateChange: (date: string) => void;
+	selected?: string; // Cambiado a string para toISOString
+	onSelect?: (date: string | undefined) => void; // Cambiado a string para toISOString
 }
 
 const CosmosCalendar = ({
@@ -21,15 +21,15 @@ const CosmosCalendar = ({
 	label,
 	placeholder,
 	required,
-	onDateChange,
+	selected,
+	onSelect,
 	...props
 }: CosmosCalendarProps) => {
-	const [value, setValue] = useState<Date | undefined>(new Date());
-
-	const handleDateChange = (date: Date | undefined) => {
-		setValue(date);
+	const handleSelect = (date: Date | undefined) => {
 		if (date) {
-			onDateChange(date.toISOString());
+			onSelect?.(date.toISOString());
+		} else {
+			onSelect?.(undefined);
 		}
 	};
 
@@ -43,10 +43,10 @@ const CosmosCalendar = ({
 						</Label>
 					)}
 					<Button variant={"input"}>
-						{value ? (
-							format(value, "dd/MM/yyyy")
+						{selected ? (
+							format(new Date(selected), "dd/MM/yyyy")
 						) : (
-							<span>Selecciona una fecha</span>
+							<span>{placeholder || "Selecciona una fecha"}</span>
 						)}
 						<CalendarIcon className="w-4 h-4 ml-auto opacity-50" />
 					</Button>
@@ -55,8 +55,8 @@ const CosmosCalendar = ({
 			<PopoverContent className="w-auto p-0" align="start">
 				<Calendar
 					mode="single"
-					selected={value}
-					onSelect={handleDateChange}
+					selected={selected ? new Date(selected) : undefined}
+					onSelect={handleSelect}
 					disabled={(date) =>
 						date > new Date() || date < new Date("1900-01-01")
 					}

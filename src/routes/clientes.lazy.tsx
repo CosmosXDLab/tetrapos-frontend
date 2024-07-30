@@ -1,4 +1,5 @@
 import { CosmosInput } from "@/components/cosmos/CosmosInput";
+import { showCosmosToast } from "@/components/cosmos/CosmosToast";
 import CustomDataTable from "@/components/cosmos/CustomDataTable/CustomDataTable";
 import { FilterIcon, TrashIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";

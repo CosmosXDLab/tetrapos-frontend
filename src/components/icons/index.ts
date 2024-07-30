@@ -10,3 +10,6 @@ export { default as TrashIcon } from "./TrashIcon";
 export { default as FilterIcon } from "./FilterIcon";
 export { default as MessageIcon } from "./MessageIcon";
 export { default as NotificationIcon } from "./NotificationIcon";
+export { default as SuccessIcon } from "./SuccessIcon";
+export { default as CloseIcon } from "./CloseIcon";
+export { default as AlertIcon } from "./AlertIcon";

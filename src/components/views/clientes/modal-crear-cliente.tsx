@@ -1,363 +1,27 @@
-// import CosmosAlertDialog from "@/components/cosmos/CosmosAlertDialog";
-// import CosmosCalendar from "@/components/cosmos/CosmosCalendar";
-// import { CosmosInput } from "@/components/cosmos/CosmosInput";
-// import CosmosModal from "@/components/cosmos/CosmosModal";
-// import { CosmosSelect } from "@/components/cosmos/CosmosSelect";
-// import { PlusIcon } from "@/components/icons";
-// import { AlertDialogCancel } from "@/components/ui/alert-dialog";
-// import { Button } from "@/components/ui/button";
-// import { DialogClose } from "@/components/ui/dialog";
-// import type { NewEntityCliente } from "@/utils/entities/cliente";
-// import { keys } from "@/utils/entities/keynames";
-// import {
-// 	CreateClienteSchema,
-// 	type CreateClienteType,
-// } from "@/utils/forms/createClienteSchema";
-// import useHttpRequest from "@/utils/hooks/useHttpRequest";
-// import { EndPoints } from "@/utils/http-client/api-config";
-// import { useState } from "react";
-// import { SubmitHandler, useForm } from "react-hook-form";
-// import { zodResolver } from "@hookform/resolvers/zod";
-// import { z } from "zod";
-
-import CosmosModal from "@/components/cosmos/CosmosModal";
-import { PlusIcon } from "@/components/icons";
-import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormField } from "@/components/ui/form";
-import { DialogClose } from "@/components/ui/dialog";
 import CosmosAlertDialog from "@/components/cosmos/CosmosAlertDialog";
-import { AlertDialogCancel } from "@/components/ui/alert-dialog";
-import { useState } from "react";
+import CosmosCalendar from "@/components/cosmos/CosmosCalendar";
 import { CosmosInput } from "@/components/cosmos/CosmosInput";
+import CosmosModal from "@/components/cosmos/CosmosModal";
+import { CosmosSelect } from "@/components/cosmos/CosmosSelect";
+import { showCosmosToast } from "@/components/cosmos/CosmosToast";
+import { CloseIcon, PlusIcon, SuccessIcon } from "@/components/icons";
+import { AlertDialogCancel } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { DialogClose } from "@/components/ui/dialog";
+import { Form, FormField } from "@/components/ui/form";
+import type { NewEntityCliente } from "@/utils/entities/cliente";
+import { keys } from "@/utils/entities/keynames";
 import {
 	CreateClienteSchema,
 	type CreateClienteType,
 } from "@/utils/forms/createClienteSchema";
-import { CosmosSelect } from "@/components/cosmos/CosmosSelect";
-
-// const renderCosmosSelect = (
-// 	id: string,
-// 	label: string,
-// 	options: { value: string; label: string }[],
-// 	onChange: (value: string) => void,
-// 	required?: boolean,
-// ) => (
-// 	<div className="col-span-1">
-// 		<CosmosSelect
-// 			id={id}
-// 			showLabel
-// 			label={label}
-// 			options={options}
-// 			onValueChange={onChange}
-// 			required={required}
-// 		/>
-// 	</div>
-// );
-
-// const SignUpSchema = z.object({
-// 	identification_document_type: z.string().min(3).max(20),
-// 	email: z.string().email(),
-// 	password: z.string().min(3).max(20),
-// });
-// type SignUpSchemaType = z.infer<typeof SignUpSchema>;
-
-// const ModalCrearCliente = () => {
-// 	const [alertOpen, setAlertOpen] = useState(false);
-// 	const [error, setError] = useState<string | null>(null);
-// 	const [formValues, setFormValues] = useState<NewEntityCliente>({
-// 		identification_document_type: "DNI",
-// 		identification_document_number: "",
-// 		business_name: "",
-// 		first_names: "",
-// 		last_names: "",
-// 		birthday: new Date().toISOString(),
-// 		district: "",
-// 		province: "",
-// 		region: "",
-// 		address: "",
-// 		phone_number: "",
-// 		email: "",
-// 	});
-
-// 	// const {
-// 	// 	register,
-// 	// 	handleSubmit: submitForm,
-// 	// 	formState: { errors },
-// 	// 	watch,
-// 	// } = useForm<CreateClienteType>({
-// 	// 	resolver: zodResolver(CreateClienteSchema),
-// 	// });
-
-// 	const {
-// 		register,
-// 		handleSubmit,
-// 		formState: { errors },
-// 	} = useForm<SignUpSchemaType>({ resolver: zodResolver(SignUpSchema) });
-
-// 	// const handleInputChange = (id: string, newValue: string | null) => {
-// 	// 	setFormValues((prevValues) => ({
-// 	// 		...prevValues,
-// 	// 		[id]: newValue,
-// 	// 	}));
-// 	// };
-
-// 	const { mutationResult: createClientMutation } =
-// 		useHttpRequest<NewEntityCliente>(EndPoints.sales.clientes, keys.clientes, {
-// 			method: "POST",
-// 			data: formValues,
-// 		});
-
-// 	const onSubmit: SubmitHandler<SignUpSchemaType> = (data) => {
-// 		console.log(data);
-
-// 		// createClientMutation.mutateAsync().catch((err) => setError(err.message));
-// 		// setAlertOpen(false);
-// 	};
-
-// 	return (
-// 		<CosmosModal
-// 			className="w-[800px]"
-// 			title="Agregar cliente"
-// 			onClose={() => setError(null)}
-// 			error={error}
-// 			trigger={
-// 				<Button variant="icon" size="icon">
-// 					<PlusIcon className="fill-current" />
-// 				</Button>
-// 			}
-// 			footer={
-// 				<div className="flex justify-end gap-2">
-// 					<DialogClose asChild>
-// 						<Button variant="decline">Cancelar</Button>
-// 					</DialogClose>
-// 					<CosmosAlertDialog
-// 						open={alertOpen}
-// 						onOpenChange={setAlertOpen}
-// 						className="w-[500px] h-auto"
-// 						title="Confirmación"
-// 						trigger={<Button variant="accept">Guardar</Button>}
-// 						footer={
-// 							<div className="flex justify-end gap-2">
-// 								<AlertDialogCancel asChild>
-// 									<Button variant="decline">No</Button>
-// 								</AlertDialogCancel>
-// 								<Button variant="accept" onClick={handleSubmit(onSubmit)}>
-// 									Si
-// 								</Button>
-// 							</div>
-// 						}
-// 					>
-// 						<p className="text-sm">¿Deseas agregar este nuevo cliente?</p>
-// 					</CosmosAlertDialog>
-// 				</div>
-// 			}
-// 		>
-// 			{/* <>
-// 				<div className="col-span-1">
-// 					<CosmosSelect
-// 						id="tipo-documento"
-// 						showLabel
-// 						label="Tipo de documento"
-// 						options={options.documento}
-// 						// onValueChange={(value) =>
-// 						// 	handleInputChange("identification_document_type", value)
-// 						// }
-// 						{...register("identification_document_type")}
-// 						required={true}
-// 					/>
-// 				</div>
-
-// 				<div className="col-span-1">
-// 					<CosmosInput
-// 						id="numero-documento"
-// 						type="text"
-// 						showLabel
-// 						label="Número de documento"
-// 						required
-// 						{...register("identification_document_number")}
-// 						// onChange={(e) =>
-// 						// 	handleInputChange(
-// 						// 		"identification_document_number",
-// 						// 		e.target.value,
-// 						// 	)
-// 						// }
-// 					/>
-// 				</div>
-
-// 				{watch("identification_document_type") === "DNI" ? (
-// 					<>
-// 						<div className="col-span-1" />
-
-// 						<div className="col-span-1">
-// 							<CosmosInput
-// 								id="nombres"
-// 								type="text"
-// 								showLabel
-// 								label="Nombres"
-// 								required
-// 								{...register("first_names")}
-// 								// onChange={(e) =>
-// 								// 	handleInputChange("first_names", e.target.value)
-// 								// }
-// 							/>
-// 						</div>
-
-// 						<div className="col-span-1">
-// 							<CosmosInput
-// 								id="apellidos"
-// 								type="text"
-// 								showLabel
-// 								label="Apellidos"
-// 								required
-// 								{...register("last_names")}
-// 								// onChange={(e) =>
-// 								// 	handleInputChange("last_names", e.target.value)
-// 								// }
-// 							/>
-// 						</div>
-
-// 						<div className="col-span-1" />
-// 					</>
-// 				) : (
-// 					<div className="col-span-3">
-// 						<CosmosInput
-// 							id="razon-social"
-// 							type="text"
-// 							showLabel
-// 							label="Razón social"
-// 							required
-// 							{...register("business_name")}
-// 							// onChange={(e) =>
-// 							// 	handleInputChange("business_name", e.target.value)
-// 							// }
-// 						/>
-// 					</div>
-// 				)}
-
-// 				<div className="col-span-1">
-// 					<CosmosSelect
-// 						id="departamento"
-// 						showLabel
-// 						label="Departamento"
-// 						options={options.departamento}
-// 						required={true}
-// 						{...register("region")}
-// 						// onValueChange={(value) => handleInputChange("region", value)}
-// 					/>
-// 				</div>
-
-// 				<div className="col-span-1">
-// 					<CosmosSelect
-// 						id="provincia"
-// 						showLabel
-// 						label="Provincia"
-// 						options={options.provincia}
-// 						required={true}
-// 						{...register("province")}
-// 						// onValueChange={(value) => handleInputChange("province", value)}
-// 					/>
-// 				</div>
-
-// 				<div className="col-span-1">
-// 					<CosmosSelect
-// 						id="distrito"
-// 						showLabel
-// 						label="Distrito"
-// 						options={options.provincia}
-// 						required={true}
-// 						{...register("district")}
-// 						// onValueChange={(value) => handleInputChange("district", value)}
-// 					/>
-// 				</div>
-
-// 				<div className="col-span-2">
-// 					<CosmosInput
-// 						id="direccion"
-// 						type="text"
-// 						showLabel
-// 						label="Dirección"
-// 						{...register("address")}
-// 						// onChange={(e) => handleInputChange("address", e.target.value)}
-// 					/>
-// 				</div>
-
-// 				<div className="col-span-1" />
-
-// 				<div className="col-span-1">
-// 					<CosmosInput
-// 						id="telefono"
-// 						type="text"
-// 						showLabel
-// 						label="Nro. Celular"
-// 						{...register("phone_number")}
-// 						// onChange={(e) => handleInputChange("phone_number", e.target.value)}
-// 					/>
-// 				</div>
-
-// 				<div className="col-span-1">
-// 					<CosmosInput
-// 						id="email"
-// 						type="email"
-// 						showLabel
-// 						label="Correo electrónico"
-// 						{...register("email")}
-// 						// onChange={(e) => handleInputChange("email", e.target.value)}
-// 					/>
-// 				</div>
-
-// 				<div className="col-span-1">
-// 					<CosmosCalendar
-// 						id="fecha-nacimiento"
-// 						showLabel
-// 						label="F. de nacimiento"
-// 						onDateChange={(date) => register("birthday", { value: date })}
-// 					/>
-// 				</div>
-// 			</> */}
-
-// 			<div className="col-span-1">
-// 				<CosmosSelect
-// 					id="tipo-documento"
-// 					showLabel
-// 					label="Tipo de documento"
-// 					options={options.documento}
-// 					onValueChange={(value) =>
-// 						register("identification_document_type", { value })
-// 					}
-// 					{...register("identification_document_type")}
-// 					required={true}
-// 				/>
-// 			</div>
-
-// 			<div className="col-span-1">
-// 				<CosmosInput
-// 					id="email"
-// 					type="email"
-// 					showLabel
-// 					label="Correo electrónico"
-// 					required
-// 					{...register("email")}
-// 				/>
-// 			</div>
-
-// 			{errors.email && <span>{errors.email.message}</span>}
-
-// 			<input
-// 				className="input"
-// 				placeholder="password"
-// 				{...register("password")}
-// 			/>
-
-// 			{errors.password && <span>{errors.password.message}</span>}
-
-// 			<button type="submit">submit!</button>
-// 		</CosmosModal>
-// 	);
-// };
-
-// export default ModalCrearCliente;
+import useHttpRequest from "@/utils/hooks/useHttpRequest";
+import { EndPoints } from "@/utils/http-client/api-config";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AlertDialogAction } from "@radix-ui/react-alert-dialog";
+import { useState } from "react";
+import { type FieldErrors, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 const options = {
 	documento: [
@@ -380,28 +44,64 @@ const options = {
 
 const ModalCrearCliente = () => {
 	const [alertOpen, setAlertOpen] = useState(false);
+	const [modalOpen, setModalOpen] = useState(false);
+	const [error, setError] = useState<string | null>(null);
 
-	// 1. Define your form.
 	const form = useForm<CreateClienteType>({
 		resolver: zodResolver(CreateClienteSchema),
 		defaultValues: {
 			email: "",
+			identification_document_type: "DNI",
+			identification_document_number: "",
+			business_name: "",
+			region: options.departamento[0].value,
+			province: options.provincia[0].value,
+			district: options.distrito[0].value,
+			address: "",
+			phone_number: "",
+			birthday: new Date().toISOString(),
+			first_names: "",
+			last_names: "",
 		},
 	});
 
-	// 2. Define a submit handler.
-	function onSubmit(values: CreateClienteType) {
-		// Do something with the form values.
-		// ✅ This will be type-safe and validated.
-		console.log(values);
-	}
+	const { mutationResult: createClienteMutation } =
+		useHttpRequest<NewEntityCliente>(EndPoints.sales.clientes, keys.clientes, {
+			method: "POST",
+			data: form.getValues(),
+		});
+
+	const onSubmit = (values: CreateClienteType) => {
+		createClienteMutation
+			.mutateAsync()
+			.then(() => {
+				setAlertOpen(false);
+				setModalOpen(false);
+				setError(null);
+				form.reset();
+				showCosmosToast({
+					message: "Se registró un nuevo cliente",
+					type: "success",
+				});
+			})
+			.catch((error) => {
+				setError(error.message);
+				setAlertOpen(false);
+			});
+	};
+
+	const onError = (errors: FieldErrors) => {
+		setAlertOpen(false);
+		setError("Por favor, revisa los campos del formulario.");
+	};
 
 	return (
 		<CosmosModal
 			className="w-[800px]"
 			title="Agregar cliente"
-			// onClose={() => setError(null)}
-			// error={error}
+			error={error}
+			open={modalOpen}
+			onOpenChange={setModalOpen}
 			trigger={
 				<Button variant="icon" size="icon">
 					<PlusIcon className="fill-current" />
@@ -423,9 +123,14 @@ const ModalCrearCliente = () => {
 								<AlertDialogCancel asChild>
 									<Button variant="decline">No</Button>
 								</AlertDialogCancel>
-								<Button variant="accept" onClick={form.handleSubmit(onSubmit)}>
-									Si
-								</Button>
+								<AlertDialogAction asChild>
+									<Button
+										variant="accept"
+										onClick={form.handleSubmit(onSubmit, onError)}
+									>
+										Si
+									</Button>
+								</AlertDialogAction>
 							</div>
 						}
 					>
@@ -454,12 +159,158 @@ const ModalCrearCliente = () => {
 
 				<FormField
 					control={form.control}
-					name="email"
+					name="identification_document_number"
 					render={({ field }) => (
 						<div className="col-span-1">
 							<CosmosInput
 								showLabel
 								required
+								type="text"
+								label="Número de documento"
+								{...field}
+							/>
+						</div>
+					)}
+				/>
+
+				<div className="col-span-1" />
+
+				{form.watch("identification_document_type") === "DNI" ? (
+					<>
+						<FormField
+							control={form.control}
+							name="first_names"
+							render={({ field }) => (
+								<div className="col-span-1">
+									<CosmosInput
+										showLabel
+										required
+										type="text"
+										label="Nombres"
+										{...field}
+									/>
+								</div>
+							)}
+						/>
+
+						<FormField
+							control={form.control}
+							name="last_names"
+							render={({ field }) => (
+								<div className="col-span-1">
+									<CosmosInput
+										showLabel
+										required
+										type="text"
+										label="Apellidos"
+										{...field}
+									/>
+								</div>
+							)}
+						/>
+
+						<div className="col-span-1" />
+					</>
+				) : (
+					<FormField
+						control={form.control}
+						name="business_name"
+						render={({ field }) => (
+							<div className="col-span-3">
+								<CosmosInput
+									showLabel
+									required
+									type="text"
+									label="Razón social"
+									{...field}
+								/>
+							</div>
+						)}
+					/>
+				)}
+
+				<FormField
+					control={form.control}
+					name="region"
+					render={({ field }) => (
+						<div className="col-span-1">
+							<CosmosSelect
+								showLabel
+								label="Departamento"
+								options={options.departamento}
+								onValueChange={field.onChange}
+								{...field}
+							/>
+						</div>
+					)}
+				/>
+
+				<FormField
+					control={form.control}
+					name="province"
+					render={({ field }) => (
+						<div className="col-span-1">
+							<CosmosSelect
+								showLabel
+								label="Provincia"
+								options={options.provincia}
+								onValueChange={field.onChange}
+								{...field}
+							/>
+						</div>
+					)}
+				/>
+
+				<FormField
+					control={form.control}
+					name="district"
+					render={({ field }) => (
+						<div className="col-span-1">
+							<CosmosSelect
+								showLabel
+								label="Distrito"
+								options={options.distrito}
+								onValueChange={field.onChange}
+								{...field}
+							/>
+						</div>
+					)}
+				/>
+
+				<FormField
+					control={form.control}
+					name="address"
+					render={({ field }) => (
+						<div className="col-span-2">
+							<CosmosInput showLabel type="text" label="Dirección" {...field} />
+						</div>
+					)}
+				/>
+
+				<div className="col-span-1" />
+
+				<FormField
+					control={form.control}
+					name="phone_number"
+					render={({ field }) => (
+						<div className="col-span-1">
+							<CosmosInput
+								showLabel
+								type="text"
+								label="Nro. Celular"
+								{...field}
+							/>
+						</div>
+					)}
+				/>
+
+				<FormField
+					control={form.control}
+					name="email"
+					render={({ field }) => (
+						<div className="col-span-1">
+							<CosmosInput
+								showLabel
 								type="email"
 								label="Correo electrónico"
 								{...field}
@@ -467,6 +318,68 @@ const ModalCrearCliente = () => {
 						</div>
 					)}
 				/>
+
+				<FormField
+					control={form.control}
+					name="birthday"
+					render={({ field }) => (
+						<div className="col-span-1">
+							<CosmosCalendar
+								showLabel
+								selected={field.value}
+								onSelect={(date) => {
+									field.onChange(date);
+								}}
+								label="F. de nacimiento"
+							/>
+						</div>
+					)}
+				/>
+
+				{/* <FormField
+					control={form.control}
+					name="birthday"
+					render={({ field }) => (
+						<FormItem className="flex flex-col">
+							<FormLabel>Date of birth</FormLabel>
+							<Popover>
+								<PopoverTrigger asChild>
+									<FormControl>
+										<Button
+											variant={"outline"}
+											className={cn(
+												"w-[240px] pl-3 text-left font-normal",
+												!field.value && "text-muted-foreground",
+											)}
+										>
+											{field.value ? (
+												format(field.value, "PPP")
+											) : (
+												<span>Pick a date</span>
+											)}
+											<CalendarIcon className="w-4 h-4 ml-auto opacity-50" />
+										</Button>
+									</FormControl>
+								</PopoverTrigger>
+								<PopoverContent className="w-auto p-0" align="start">
+									<Calendar
+										mode="single"
+										selected={field.value}
+										onSelect={field.onChange}
+										disabled={(date) =>
+											date > new Date() || date < new Date("1900-01-01")
+										}
+										initialFocus
+									/>
+								</PopoverContent>
+							</Popover>
+							<FormDescription>
+								Your date of birth is used to calculate your age.
+							</FormDescription>
+							<FormMessage />
+						</FormItem>
+					)}
+				/> */}
 			</Form>
 		</CosmosModal>
 	);

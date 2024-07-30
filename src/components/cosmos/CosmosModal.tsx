@@ -17,7 +17,8 @@ interface CosmosModalProps extends React.HTMLAttributes<HTMLDivElement> {
 	children: React.ReactNode;
 	footer?: React.ReactNode;
 	error?: string | null;
-	onClose?: () => void;
+	open: boolean;
+	onOpenChange: (open: boolean) => void;
 }
 
 const CosmosModal = ({
@@ -28,11 +29,12 @@ const CosmosModal = ({
 	footer,
 	error,
 	className,
-	onClose,
+	open,
+	onOpenChange,
 	...props
 }: CosmosModalProps) => {
 	return (
-		<Dialog onOpenChange={(isOpen) => !isOpen && onClose?.()}>
+		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogTrigger asChild>{trigger}</DialogTrigger>
 			<DialogContent
 				className={cn("sm:max-w-[700px] p-0 gap-0", className)}
