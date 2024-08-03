@@ -22,8 +22,7 @@ const CosmosCalendar = ({
 	placeholder,
 	required,
 	selected,
-	onSelect,
-	...props
+	onSelect
 }: CosmosCalendarProps) => {
 	const handleSelect = (date: Date | undefined) => {
 		if (date) {

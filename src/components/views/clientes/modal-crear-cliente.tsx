@@ -4,7 +4,7 @@ import { CosmosInput } from "@/components/cosmos/CosmosInput";
 import CosmosModal from "@/components/cosmos/CosmosModal";
 import { CosmosSelect } from "@/components/cosmos/CosmosSelect";
 import { showCosmosToast } from "@/components/cosmos/CosmosToast";
-import { CloseIcon, PlusIcon, SuccessIcon } from "@/components/icons";
+import { PlusIcon } from "@/components/icons";
 import { AlertDialogCancel } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { DialogClose } from "@/components/ui/dialog";
@@ -20,8 +20,7 @@ import { EndPoints } from "@/utils/http-client/api-config";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertDialogAction } from "@radix-ui/react-alert-dialog";
 import { useState } from "react";
-import { type FieldErrors, useForm } from "react-hook-form";
-import { toast } from "sonner";
+import { useForm } from "react-hook-form";
 
 const options = {
 	documento: [
@@ -71,7 +70,7 @@ const ModalCrearCliente = () => {
 			data: form.getValues(),
 		});
 
-	const onSubmit = (values: CreateClienteType) => {
+	const onSubmit = () => {
 		createClienteMutation
 			.mutateAsync()
 			.then(() => {
@@ -84,13 +83,13 @@ const ModalCrearCliente = () => {
 					type: "success",
 				});
 			})
-			.catch((error) => {
+			.catch((error: any) => {
 				setError(error.message);
 				setAlertOpen(false);
 			});
 	};
 
-	const onError = (errors: FieldErrors) => {
+	const onError = () => {
 		setAlertOpen(false);
 		setError("Por favor, revisa los campos del formulario.");
 	};
