@@ -43,8 +43,7 @@ const CosmosSelect = React.forwardRef<HTMLDivElement, SelectProps>(
 			icon,
 			onValueChange,
 			...props
-		},
-		ref,
+		}
 	) => {
 		return (
 			<div className="flex flex-col items-start justify-center gap-4">
