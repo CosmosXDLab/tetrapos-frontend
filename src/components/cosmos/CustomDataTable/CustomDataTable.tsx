@@ -1,25 +1,15 @@
-import {
-	flexRender,
-	getCoreRowModel,
-	useReactTable,
-} from "@tanstack/react-table";
+import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import type { DataTableProps } from "./types";
 import "./CustomDataTable.css";
-import { useState } from "react";
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useEffect, useMemo, useState } from "react";
 
-const CustomDataTable = <TData, TValue>({
+const CustomDataTable = <TData extends { id: string | number }, TValue>({
 	columns,
 	data,
-}: DataTableProps<TData, TValue>) => {
-	const [rowSelection, setRowSelection] = useState({});
+	onRowSelectionChange, // New prop to notify parent component about selection changes
+}: DataTableProps<TData, TValue> & { onRowSelectionChange: (selected: Record<string, TData>) => void }) => {
+	const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
 
 	const table = useReactTable({
 		data,
@@ -31,6 +21,23 @@ const CustomDataTable = <TData, TValue>({
 		},
 	});
 
+	// Compute selectedRowsData using useMemo
+	const selectedRowsData = useMemo(() => {
+		const selectedData: Record<string, TData> = {};
+		for (const rowId in rowSelection) {
+			if (rowSelection[rowId]) {
+				const row = table.getRow(rowId);
+				selectedData[rowId] = row.original;
+			}
+		}
+		return selectedData;
+	}, [rowSelection, table]);
+
+	// Trigger the onRowSelectionChange callback after rendering
+	useEffect(() => {
+		onRowSelectionChange(selectedRowsData);
+	}, [selectedRowsData, onRowSelectionChange]);
+
 	return (
 		<Table className="table-container">
 			<TableHeader>
@@ -39,12 +46,7 @@ const CustomDataTable = <TData, TValue>({
 						{headerGroup.headers.map((header) => {
 							return (
 								<TableHead key={header.id} className="table-head">
-									{header.isPlaceholder
-										? null
-										: flexRender(
-												header.column.columnDef.header,
-												header.getContext(),
-											)}
+									{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
 								</TableHead>
 							);
 						})}
@@ -54,11 +56,7 @@ const CustomDataTable = <TData, TValue>({
 			<TableBody>
 				{table.getRowModel().rows?.length ? (
 					table.getRowModel().rows.map((row) => (
-						<TableRow
-							className="table-body-row"
-							key={row.id}
-							data-state={row.getIsSelected() && "selected"}
-						>
+						<TableRow className="table-body-row" key={row.id} data-state={row.getIsSelected() && "selected"}>
 							{row.getVisibleCells().map((cell) => (
 								<TableCell className="p-5" key={cell.id}>
 									{flexRender(cell.column.columnDef.cell, cell.getContext())}

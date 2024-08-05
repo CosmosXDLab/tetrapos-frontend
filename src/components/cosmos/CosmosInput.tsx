@@ -15,20 +15,7 @@ interface BaseInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 export type InputProps = BaseInputProps;
 
 const CosmosInput = React.forwardRef<HTMLInputElement, InputProps>(
-	(
-		{
-			id,
-			required,
-			label,
-			placeholder,
-			showLabel,
-			iconStart,
-			iconEnd,
-			type,
-			...props
-		},
-		ref,
-	) => {
+	({ id, required, label, placeholder, showLabel, iconStart, iconEnd, type, ...props }, ref) => {
 		return (
 			<div className="relative flex flex-col items-start justify-center gap-4">
 				{showLabel && label && (
@@ -39,9 +26,7 @@ const CosmosInput = React.forwardRef<HTMLInputElement, InputProps>(
 
 				<div className="relative w-full">
 					{iconStart && (
-						<span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-							{iconStart}
-						</span>
+						<span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">{iconStart}</span>
 					)}
 
 					<Input
@@ -53,9 +38,7 @@ const CosmosInput = React.forwardRef<HTMLInputElement, InputProps>(
 					/>
 
 					{iconEnd && (
-						<span className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-							{iconEnd}
-						</span>
+						<span className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">{iconEnd}</span>
 					)}
 				</div>
 			</div>
