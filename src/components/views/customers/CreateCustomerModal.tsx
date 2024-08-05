@@ -5,7 +5,7 @@ import CosmosModal from "@/components/cosmos/CosmosModal";
 import { CosmosSelect } from "@/components/cosmos/CosmosSelect";
 import { showCosmosToast } from "@/components/cosmos/CosmosToast";
 import { PlusIcon } from "@/components/icons";
-import { AlertDialogCancel } from "@/components/ui/alert-dialog";
+import { AlertDialogAction, AlertDialogCancel } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { DialogClose } from "@/components/ui/dialog";
 import { Form, FormField } from "@/components/ui/form";
@@ -14,9 +14,7 @@ import { useModal } from "@/hooks/useModal";
 import { CreateCustomerSchema } from "@/schemas/customer/createCustomerSchema";
 import type { CreateCustomer } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertDialogAction } from "@radix-ui/react-alert-dialog";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { type FieldErrors, useForm } from "react-hook-form";
 
 const options = {
 	documento: [
@@ -62,28 +60,15 @@ const CreateCustomerModal = () => {
 		},
 	});
 
-	const { mutationResult: createClienteMutation } =
-		useHttpRequest<NewEntityCliente>(EndPoints.sales.clientes, keys.clientes, {
-			method: "POST",
-			data: form.getValues(),
-		});
-
-	const onSubmit = () => {
-		createClienteMutation
-			.mutateAsync()
-			.then(() => {
-				setAlertOpen(false);
-				setModalOpen(false);
-				setError(null);
-				form.reset();
-				showCosmosToast({
-					message: "Se registró un nuevo cliente",
-					type: "success",
-				});
-			})
-			.catch((error: any) => {
-				setError(error.message);
-				setAlertOpen(false);
+	const onSubmit = async (values: CreateCustomer) => {
+		try {
+			await mutateCreateCustomer(values);
+			onAlertOpenChange(false);
+			onModalOpenChange(false);
+			form.reset();
+			showCosmosToast({
+				message: "Se registró un nuevo cliente",
+				type: "success",
 			});
 		} catch (error) {
 			onAlertOpenChange(false);
@@ -91,9 +76,11 @@ const CreateCustomerModal = () => {
 		}
 	};
 
-	const onError = () => {
-		setAlertOpen(false);
-		setError("Por favor, revisa los campos del formulario.");
+	const onError = (errors: FieldErrors) => {
+		console.log(errors);
+
+		onAlertOpenChange(false);
+		setModalError("Por favor, revisa los campos del formulario.");
 	};
 
 	return (
