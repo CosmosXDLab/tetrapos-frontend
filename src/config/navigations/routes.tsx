@@ -29,27 +29,27 @@ const routesNavigators: RoutesNavigators[] = [
 	{
 		name: "Productos",
 		icon: ViewInArIcon,
-		path: "/productos",
+		path: "/products",
 	},
 	{
 		name: "Clientes",
 		icon: PeopleIcon,
-		path: "/clientes",
+		path: "/customers",
 	},
 	{
 		name: "Punto de Venta",
 		icon: ShoppingCartIcon,
-		path: "/punto-de-venta",
+		path: "/pos",
 	},
 	{
 		name: "Diario de Caja",
 		icon: LockClockIcon,
-		path: "/diario-de-caja",
+		path: "/cash-register",
 	},
 	{
 		name: "Configuración",
 		icon: SettingsIcon,
-		path: "/configuracion",
+		path: "/settings",
 	},
 ];
 
