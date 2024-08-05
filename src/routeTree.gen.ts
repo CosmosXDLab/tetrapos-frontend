@@ -16,49 +16,45 @@ import { Route as rootRoute } from './routes/__root'
 
 // Create Virtual Routes
 
-const PuntoDeVentaLazyImport = createFileRoute('/punto-de-venta')()
-const ProductosLazyImport = createFileRoute('/productos')()
-const DiarioDeCajaLazyImport = createFileRoute('/diario-de-caja')()
+const SettingsLazyImport = createFileRoute('/settings')()
+const ProductsLazyImport = createFileRoute('/products')()
+const PosLazyImport = createFileRoute('/pos')()
 const DashboardLazyImport = createFileRoute('/dashboard')()
-const ConfiguracionLazyImport = createFileRoute('/configuracion')()
-const ClientesLazyImport = createFileRoute('/clientes')()
+const CustomersLazyImport = createFileRoute('/customers')()
+const CashRegisterLazyImport = createFileRoute('/cash-register')()
 const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
 
-const PuntoDeVentaLazyRoute = PuntoDeVentaLazyImport.update({
-  path: '/punto-de-venta',
+const SettingsLazyRoute = SettingsLazyImport.update({
+  path: '/settings',
   getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/punto-de-venta.lazy').then((d) => d.Route),
-)
+} as any).lazy(() => import('./routes/settings.lazy').then((d) => d.Route))
 
-const ProductosLazyRoute = ProductosLazyImport.update({
-  path: '/productos',
+const ProductsLazyRoute = ProductsLazyImport.update({
+  path: '/products',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/productos.lazy').then((d) => d.Route))
+} as any).lazy(() => import('./routes/products.lazy').then((d) => d.Route))
 
-const DiarioDeCajaLazyRoute = DiarioDeCajaLazyImport.update({
-  path: '/diario-de-caja',
+const PosLazyRoute = PosLazyImport.update({
+  path: '/pos',
   getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/diario-de-caja.lazy').then((d) => d.Route),
-)
+} as any).lazy(() => import('./routes/pos.lazy').then((d) => d.Route))
 
 const DashboardLazyRoute = DashboardLazyImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/dashboard.lazy').then((d) => d.Route))
 
-const ConfiguracionLazyRoute = ConfiguracionLazyImport.update({
-  path: '/configuracion',
+const CustomersLazyRoute = CustomersLazyImport.update({
+  path: '/customers',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/configuracion.lazy').then((d) => d.Route))
+} as any).lazy(() => import('./routes/customers.lazy').then((d) => d.Route))
 
-const ClientesLazyRoute = ClientesLazyImport.update({
-  path: '/clientes',
+const CashRegisterLazyRoute = CashRegisterLazyImport.update({
+  path: '/cash-register',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/clientes.lazy').then((d) => d.Route))
+} as any).lazy(() => import('./routes/cash-register.lazy').then((d) => d.Route))
 
 const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
@@ -76,18 +72,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
-    '/clientes': {
-      id: '/clientes'
-      path: '/clientes'
-      fullPath: '/clientes'
-      preLoaderRoute: typeof ClientesLazyImport
+    '/cash-register': {
+      id: '/cash-register'
+      path: '/cash-register'
+      fullPath: '/cash-register'
+      preLoaderRoute: typeof CashRegisterLazyImport
       parentRoute: typeof rootRoute
     }
-    '/configuracion': {
-      id: '/configuracion'
-      path: '/configuracion'
-      fullPath: '/configuracion'
-      preLoaderRoute: typeof ConfiguracionLazyImport
+    '/customers': {
+      id: '/customers'
+      path: '/customers'
+      fullPath: '/customers'
+      preLoaderRoute: typeof CustomersLazyImport
       parentRoute: typeof rootRoute
     }
     '/dashboard': {
@@ -97,25 +93,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLazyImport
       parentRoute: typeof rootRoute
     }
-    '/diario-de-caja': {
-      id: '/diario-de-caja'
-      path: '/diario-de-caja'
-      fullPath: '/diario-de-caja'
-      preLoaderRoute: typeof DiarioDeCajaLazyImport
+    '/pos': {
+      id: '/pos'
+      path: '/pos'
+      fullPath: '/pos'
+      preLoaderRoute: typeof PosLazyImport
       parentRoute: typeof rootRoute
     }
-    '/productos': {
-      id: '/productos'
-      path: '/productos'
-      fullPath: '/productos'
-      preLoaderRoute: typeof ProductosLazyImport
+    '/products': {
+      id: '/products'
+      path: '/products'
+      fullPath: '/products'
+      preLoaderRoute: typeof ProductsLazyImport
       parentRoute: typeof rootRoute
     }
-    '/punto-de-venta': {
-      id: '/punto-de-venta'
-      path: '/punto-de-venta'
-      fullPath: '/punto-de-venta'
-      preLoaderRoute: typeof PuntoDeVentaLazyImport
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsLazyImport
       parentRoute: typeof rootRoute
     }
   }
@@ -125,12 +121,12 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
-  ClientesLazyRoute,
-  ConfiguracionLazyRoute,
+  CashRegisterLazyRoute,
+  CustomersLazyRoute,
   DashboardLazyRoute,
-  DiarioDeCajaLazyRoute,
-  ProductosLazyRoute,
-  PuntoDeVentaLazyRoute,
+  PosLazyRoute,
+  ProductsLazyRoute,
+  SettingsLazyRoute,
 })
 
 /* prettier-ignore-end */
@@ -142,34 +138,34 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/clientes",
-        "/configuracion",
+        "/cash-register",
+        "/customers",
         "/dashboard",
-        "/diario-de-caja",
-        "/productos",
-        "/punto-de-venta"
+        "/pos",
+        "/products",
+        "/settings"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
     },
-    "/clientes": {
-      "filePath": "clientes.lazy.tsx"
+    "/cash-register": {
+      "filePath": "cash-register.lazy.tsx"
     },
-    "/configuracion": {
-      "filePath": "configuracion.lazy.tsx"
+    "/customers": {
+      "filePath": "customers.lazy.tsx"
     },
     "/dashboard": {
       "filePath": "dashboard.lazy.tsx"
     },
-    "/diario-de-caja": {
-      "filePath": "diario-de-caja.lazy.tsx"
+    "/pos": {
+      "filePath": "pos.lazy.tsx"
     },
-    "/productos": {
-      "filePath": "productos.lazy.tsx"
+    "/products": {
+      "filePath": "products.lazy.tsx"
     },
-    "/punto-de-venta": {
-      "filePath": "punto-de-venta.lazy.tsx"
+    "/settings": {
+      "filePath": "settings.lazy.tsx"
     }
   }
 }

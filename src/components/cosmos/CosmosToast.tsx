@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/tailwindCN";
 import { toast } from "sonner";
 import { AlertIcon, CloseIcon, SuccessIcon } from "../icons";
 import { Button } from "../ui/button";
@@ -34,10 +34,7 @@ const getTypeStyles = (type: "success" | "alert" | "info") => {
 	}
 };
 
-export const showCosmosToast = ({
-	message,
-	type = "info",
-}: CosmosToastProps) => {
+export const showCosmosToast = ({ message, type = "info" }: CosmosToastProps) => {
 	const { icon, text, border, closeIcon } = getTypeStyles(type);
 
 	toast.custom(
@@ -46,11 +43,7 @@ export const showCosmosToast = ({
 				{icon}
 				<div className="flex items-center justify-between w-full">
 					<p className={cn("text-xs font-semibold", text)}>{message}</p>
-					<Button
-						variant={"ghost"}
-						size={"icon"}
-						onClick={() => toast.dismiss(t)}
-					>
+					<Button variant={"ghost"} size={"icon"} onClick={() => toast.dismiss(t)}>
 						<CloseIcon className={cn("w-6 h-6", closeIcon)} />
 					</Button>
 				</div>
