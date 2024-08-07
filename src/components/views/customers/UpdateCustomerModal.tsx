@@ -155,6 +155,8 @@ const UpdateCustomerModal = ({
 					disabled
 				/>
 
+				<div className="col-span-1" />
+
 				<Form {...form}>
 					{data?.identification_document_type === "DNI" ? (
 						<>
