@@ -2,6 +2,7 @@ import { CosmosInput } from "@/components/cosmos/CosmosInput";
 import { MessageIcon, NotificationIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
+import Avvvatars from "avvvatars-react";
 
 const TopBar = () => {
 	return (
@@ -22,7 +23,7 @@ const TopBar = () => {
 				</Button>
 
 				<div>
-					<p className="text-sm">Sherry Miranda</p>
+					<Avvvatars value="Bryan Grados" border shadow size={40} />
 				</div>
 			</div>
 		</div>
