@@ -270,7 +270,7 @@ const CreateCustomerModal = () => {
 					)}
 				/>
 
-				<FormField
+				{/* <FormField
 					control={form.control}
 					name="birthday"
 					render={({ field }) => (
@@ -285,7 +285,7 @@ const CreateCustomerModal = () => {
 							/>
 						</div>
 					)}
-				/>
+				/> */}
 			</Form>
 		</CosmosModal>
 	);
