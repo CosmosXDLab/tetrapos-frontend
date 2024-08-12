@@ -22,7 +22,8 @@ const TopBar = () => {
 					<NotificationIcon className="fill-current" />
 				</Button>
 
-				<div>
+				<div className="flex items-center justify-center gap-2">
+					<p className="text-sm">Sherry Miranda</p>
 					<Avvvatars value="Bryan Grados" border shadow size={40} />
 				</div>
 			</div>
