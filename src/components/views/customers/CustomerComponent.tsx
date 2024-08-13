@@ -7,17 +7,14 @@ import type { Customer } from "@/types";
 import { useState } from "react";
 import CreateCustomerModal from "./CreateCustomerModal";
 import { columns } from "./columns";
-import { useGetAllCustomers } from "@/hooks/useCustomer";
+import { useGetAllCustomers, useGetCustomerById } from "@/hooks/useCustomer";
 import DeleteCustomer from "./DeleteCustomer";
+import { useDeleteProduct, useGetAllProducts, useGetProductById } from "@/hooks/useProducts";
 
 const CustomerView = () => {
 	const { data } = useGetAllCustomers();
 	const [selectedRowsData, setSelectedRowsData] = useState<Record<string, Customer>>({});
 	const selectedIds = Object.values(selectedRowsData).map((row) => row.id);
-	// const handleDeleteSelected = async () => {
-	// 	const selectedIds = Object.values(selectedRowsData).map((row) => row.id);
-	// 	console.log(selectedIds);
-	// };
 
 	return (
 		<div className="flex flex-col w-full h-full gap-5 px-12 py-12">
