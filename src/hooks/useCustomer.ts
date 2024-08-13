@@ -3,24 +3,6 @@ import { apiRequest } from "@/api/services/apiRequest";
 import type { CreateCustomer, Customer, EndPointsValues, UpdateCustomer } from "@/types"; // Assuming you have a Customer type
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-// export function useDeleteCustomer(
-// 	options?: UseMutationOptions<null, Error, string>, // Expect 'string' (id) as the argument during mutation
-// ) {
-// 	const queryClient = useQueryClient();
-
-// 	return useMutation({
-// 		mutationFn: async (id: string) => {
-// 			const endpoint = `${EndPoints.sales.customers}/${id}` as EndPointsValues;
-// 			const response = await apiRequest<null>("delete", endpoint);
-// 			return response.data;
-// 		},
-// 		onSuccess: () => {
-// 			queryClient.invalidateQueries({ queryKey: ["getAllCustomers"] });
-// 		},
-// 		...options,
-// 	});
-// }
-
 export function useGetAllCustomers() {
 	return useQuery<Customer[]>({
 		queryFn: async () => {

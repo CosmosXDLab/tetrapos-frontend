@@ -24,7 +24,7 @@ const TopBar = () => {
 
 				<div className="flex items-center justify-center gap-2">
 					<p className="text-sm">Sherry Miranda</p>
-					<Avvvatars value="Bryan Grados" border shadow size={40} />
+					<Avvvatars value="Sherry Miranda" border shadow size={40} />
 				</div>
 			</div>
 		</div>
