@@ -1,71 +1,72 @@
 import { EndPoints } from "@/api/config/endpoints";
 import { apiRequest } from "@/api/services/apiRequest";
-import type { Products, EndPointsValues } from "@/types";
-import { useQuery } from "@tanstack/react-query";
+import type { EndPointsValues } from "@/types";
+import type { Product } from "@/types/products";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function useGetAllProducts() {
-	return useQuery<Products[]>({
+	return useQuery<Product[]>({
 		queryFn: async () => {
-			const response = await apiRequest<Products[]>("get", EndPoints.products.base);
+			const response = await apiRequest<Product[]>("get", EndPoints.products);
 			return response.data;
 		},
 		queryKey: ["getAllProducts"],
 	});
 }
 
-export function useGetCustomerById(id: string) {
-	return useQuery<Products>({
+export function useGetProductById(id: string) {
+	return useQuery<Product>({
 		queryFn: async () => {
-			const endpoint = `${EndPoints.products.base}/${id}` as EndPointsValues;
-			const response = await apiRequest<Products>("get", endpoint);
+			const endpoint = `${EndPoints.products}/${id}` as EndPointsValues;
+			const response = await apiRequest<Product>("get", endpoint);
 			return response.data;
 		},
 		queryKey: ["getProductById", id],
 	});
 }
 
-/*export function useCreateCustomer() {
+export function useCreateProduct() {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: async (data: CreateCustomer) => {
-			const response = await apiRequest<CreateCustomer>("post", EndPoints.sales.customers, data);
+		mutationFn: async (data: Product) => {
+			const response = await apiRequest<Product>("post", EndPoints.products, data);
 			return response.data;
 		},
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["getAllCustomers"] });
+			queryClient.invalidateQueries({ queryKey: ["getAllProducts"] });
 		},
 	});
 }
 
-export function useUpdateCustomer() {
+export function useUpdateProduct() {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: async ({ data, id }: { data: UpdateCustomer; id: string }) => {
-			const endpoint = `${EndPoints.sales.customers}/${id}` as EndPointsValues;
-			const response = await apiRequest<UpdateCustomer>("put", endpoint, data);
+		mutationFn: async ({ data, id }: { data: Product; id: string }) => {
+			const endpoint = `${EndPoints.products}/${id}` as EndPointsValues;
+			const response = await apiRequest<Product>("put", endpoint, data);
 			console.log(response.data);
 
 			return response.data;
 		},
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["getAllCustomers"] });
+			queryClient.invalidateQueries({ queryKey: ["getAllProducts"] });
 		},
 	});
 }
 
-export function useDeleteCustomer() {
+export function useDeleteProduct() {
 	const queryClient = useQueryClient();
 
 	return useMutation({
 		mutationFn: async (id: string) => {
-			const endpoint = `${EndPoints.sales.customers}/${id}` as EndPointsValues;
+			const endpoint = `${EndPoints.products}/${id}` as EndPointsValues;
 			const response = await apiRequest<null>("delete", endpoint);
 			return response.data;
 		},
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["getAllCustomers"] });
+			queryClient.invalidateQueries({ queryKey: ["getAllProducts"] });
 		},
 	});
-}*/
+}

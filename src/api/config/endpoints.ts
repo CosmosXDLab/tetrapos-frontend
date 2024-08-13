@@ -1,16 +1,14 @@
 export enum ApiRoutes {
-	SALES_CLIENTES = "sales/customers",
-	SALES_PAGOS = "sales/invoices",
-	PRODUCTS = "/products"
+	SALES_CUSTOMERS = "sales/customers",
+	SALES_INVOICES = "sales/invoices",
+	PRODUCTS = "products",
 	// Añadir más rutas según se necesiten
 }
 
 export const EndPoints = {
 	sales: {
-		customers: ApiRoutes.SALES_CLIENTES,
-		invoices: ApiRoutes.SALES_PAGOS,
+		customers: ApiRoutes.SALES_CUSTOMERS,
+		invoices: ApiRoutes.SALES_INVOICES,
 	},
-	products: {
-		base: ApiRoutes.PRODUCTS
-	}
+	products: ApiRoutes.PRODUCTS,
 } as const;
