@@ -1,11 +1,12 @@
 import { CosmosInput } from "@/components/cosmos/CosmosInput";
 import CustomDataTable from "@/components/cosmos/CustomDataTable/CustomDataTable";
-import { FilterIcon, TrashIcon, PlusIcon } from "@/components/icons";
+import { FilterIcon, TrashIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { columns } from "./columns";
 import { useState } from "react";
 import { useGetAllCashRegister } from "@/hooks/useCashRegister";
+import CreateCashRegisterModal from "./CreateCashRegisterModal";
 
 const CashRegiterComponent = () => {
 	const { data } = useGetAllCashRegister();
@@ -17,9 +18,7 @@ const CashRegiterComponent = () => {
 			<div className="flex justify-between w-full">
 				<h1 className="text-3xl font-semibold text-cosmos-texto">Diario de Caja</h1>
 				<div className="flex gap-2">
-                    <Button variant="icon" size="icon">
-                        <PlusIcon className="fill-current" />
-                    </Button>
+                    <CreateCashRegisterModal />
 
 					<Button variant={"icon"} size={"icon"}>
 						<TrashIcon className="fill-current" />

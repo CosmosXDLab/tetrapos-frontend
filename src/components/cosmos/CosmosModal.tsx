@@ -12,6 +12,7 @@ import { Cross1Icon } from "@radix-ui/react-icons";
 
 interface CosmosModalProps extends React.HTMLAttributes<HTMLDivElement> {
 	title: string;
+	titleError?: string;
 	trigger?: React.ReactNode;
 	header?: React.ReactNode;
 	children: React.ReactNode;
@@ -23,6 +24,7 @@ interface CosmosModalProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const CosmosModal = ({
 	title,
+	titleError,
 	trigger,
 	header,
 	children,
@@ -54,9 +56,9 @@ const CosmosModal = ({
 
 				{error && (
 					<div className="px-6 py-2 border-t-2">
-						<div className="h-[60px] text-cosmos-primario_a border rounded-md text-xs p-2 border-cosmos-primario_a flex flex-col gap-2">
-							<p className="font-bold text-cosmos-primario_a">Hubo un error al registrar al cliente</p>
-							{error}
+						<div className="min-h-[60px] text-cosmos-primario_a border rounded-md text-xs p-2 border-cosmos-primario_a flex flex-col gap-2">
+							<p className="font-bold text-cosmos-primario_a">{ titleError || 'Hubo un error al registrar'}</p>
+							<div dangerouslySetInnerHTML={{ __html: error }}/>
 						</div>
 					</div>
 				)}

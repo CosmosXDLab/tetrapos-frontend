@@ -87,6 +87,7 @@ const CreateCustomerModal = () => {
 		<CosmosModal
 			className="w-[800px]"
 			title="Agregar cliente"
+            titleError="Hubo un error al registrar al cliente"
 			error={error}
 			open={modalOpen}
 			onOpenChange={onModalOpenChange}
