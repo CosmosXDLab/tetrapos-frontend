@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { columns } from "./columns";
 import { useState } from "react";
-import { useGetAllCashRegister } from "@/hooks/useCashRegister";
-import CreateCashRegisterModal from "./CreateCashRegisterModal";
+import { useGetAllCashJournals } from "@/hooks/useCashJournals";
+import CreateCashRegisterModal from "./CreateCashJournalsModal";
 
-const CashRegiterComponent = () => {
-	const { data } = useGetAllCashRegister();
+const CashJournalsComponent = () => {
+	const { data } = useGetAllCashJournals();
     const [selectedRowsData, setSelectedRowsData] = useState<Record<string, any>>({});
 	const selectedIds = Object.values(selectedRowsData).map((row) => row.id);
 
@@ -45,4 +45,4 @@ const CashRegiterComponent = () => {
 	);
 };
 
-export default CashRegiterComponent;
+export default CashJournalsComponent;

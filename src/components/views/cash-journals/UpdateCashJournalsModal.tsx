@@ -2,19 +2,18 @@ import CosmosAlertDialog from "@/components/cosmos/CosmosAlertDialog";
 import CosmosCalendar from "@/components/cosmos/CosmosCalendar";
 import CosmosModal from "@/components/cosmos/CosmosModal";
 import { showCosmosToast } from "@/components/cosmos/CosmosToast";
-import { PlusIcon } from "@/components/icons";
 import { AlertDialogAction, AlertDialogCancel } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { DialogClose } from "@/components/ui/dialog";
 import { Form, FormField } from "@/components/ui/form";
-import { useGetCashRegisterById, useUpdateCashRegister } from "@/hooks/useCashRegister";
+import { useGetCashJournalsById, useUpdateCashJournals } from "@/hooks/useCashJournals";
 import { useModal } from "@/hooks/useModal";
-import { UpdateCashRegisterSchema } from "@/schemas/cash-register/updateCashRegisterSchema";
-import type { UpdateCashRegister } from "@/types";
+import { updateCashJournalsSchema } from "@/schemas/cash-journals/updateCashJournalsSchema";
+import type { UpdateCashJournals } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type FieldErrors, useForm } from "react-hook-form";
 
-const UpdateCashRegisterModal = ({
+const UpdateCashJournalsModal = ({
 	cashRegisterID,
 	isOpen,
 	onClose,
@@ -22,11 +21,11 @@ const UpdateCashRegisterModal = ({
 }: { cashRegisterID: string; isOpen: boolean; onClose: () => void, isPreview: boolean }) => {
 	const { error, setModalError } = useModal();
 	const { isOpen: alertOpen, onOpenChange: onAlertOpenChange } = useModal();
-	const { data, isSuccess, isPending } = useGetCashRegisterById(cashRegisterID);
-	const { mutateAsync: mutateUpdateCashRegister } = useUpdateCashRegister();
+	const { data, isSuccess, isPending } = useGetCashJournalsById(cashRegisterID);
+	const { mutateAsync: mutateUpdateCashRegister } = useUpdateCashJournals();
 
-	const form = useForm<UpdateCashRegister>({
-		resolver: zodResolver(UpdateCashRegisterSchema),
+	const form = useForm<UpdateCashJournals>({
+		resolver: zodResolver(updateCashJournalsSchema),
 		values:
 			isSuccess && data
 				? {
@@ -41,7 +40,7 @@ const UpdateCashRegisterModal = ({
 		},
 	});
 
-	const onSubmit = async (values: UpdateCashRegister) => {
+	const onSubmit = async (values: UpdateCashJournals) => {
 		try {
 			await mutateUpdateCashRegister({ data: values, id: cashRegisterID });
 			onAlertOpenChange(false);
@@ -146,4 +145,4 @@ const UpdateCashRegisterModal = ({
 	);
 };
 
-export default UpdateCashRegisterModal;
+export default UpdateCashJournalsModal;
