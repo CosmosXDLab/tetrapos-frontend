@@ -7,29 +7,29 @@ import { AlertDialogAction, AlertDialogCancel } from "@/components/ui/alert-dial
 import { Button } from "@/components/ui/button";
 import { DialogClose } from "@/components/ui/dialog";
 import { Form, FormField } from "@/components/ui/form";
-import { useCreateCashRegister } from "@/hooks/useCashRegister";
+import { useCreateCashJournals } from "@/hooks/useCashJournals";
 import { useModal } from "@/hooks/useModal";
-import { CreateCashRegisterSchema } from "@/schemas/cash-register/createCashRegisterSchema";
-import type { CreateCashRegister } from "@/types";
+import { createCashJournalsSchema } from "@/schemas/cash-journals/createCashJournalsSchema";
+import type { CreateCashJournals } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type FieldErrors, useForm } from "react-hook-form";
 
-const CreateCashRegisterModal = () => {
+const CreateCashJournalsModal = () => {
 	const { isOpen: modalOpen, error, onOpenChange: onModalOpenChange, setModalError } = useModal();
 
 	const { isOpen: alertOpen, onOpenChange: onAlertOpenChange } = useModal();
 
-	const { mutateAsync: mutateCreateCustomer } = useCreateCashRegister();
+	const { mutateAsync: mutateCreateCustomer } = useCreateCashJournals();
 
-	const form = useForm<CreateCashRegister>({
-		resolver: zodResolver(CreateCashRegisterSchema),
+	const form = useForm<CreateCashJournals>({
+		resolver: zodResolver(createCashJournalsSchema),
 		defaultValues: {
 			opening_date: "",
 			closing_date: ""
 		},
 	});
 
-	const onSubmit = async (values: CreateCashRegister) => {
+	const onSubmit = async (values: CreateCashJournals) => {
 		try {
 			await mutateCreateCustomer(values);
 			onAlertOpenChange(false);
@@ -138,4 +138,4 @@ const CreateCashRegisterModal = () => {
 	);
 };
 
-export default CreateCashRegisterModal;
+export default CreateCashJournalsModal;

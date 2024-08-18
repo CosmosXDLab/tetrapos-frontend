@@ -2,13 +2,14 @@ import ClosedEyeIcon from "@/components/icons/ClosedEyeIcon";
 import PencilIcon from "@/components/icons/PencilIcon";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { cn, formatDateSchema } from "@/lib/utils";
-import { CashRegister } from "@/types";
+import { cn } from "@/lib/utils";
+import { CashJournals } from "@/types";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useState } from "react";
-import UpdateCashRegisterModal from "./UpdateCashRegisterModal";
+import UpdateCashRegisterModal from "./UpdateCashJournalsModal";
+import { format } from "date-fns";
 
-export const columns: ColumnDef<CashRegister>[] = [
+export const columns: ColumnDef<CashJournals>[] = [
     {
 		id: "select",
 		header: ({ table }) => (
@@ -35,14 +36,14 @@ export const columns: ColumnDef<CashRegister>[] = [
 		accessorKey: "opening_date",
 		header: "Fecha de apertura",
 		cell: ({ row }) => {
-			return row.original.opening_date ? formatDateSchema(new Date(row.original.opening_date), 5) : '-';
+			return row.original?.opening_date ? format(new Date(row.original.opening_date), "dd/MM/yyyy hh:mm a") : '-';
 		}
 	},
 	{
 		accessorKey: "closing_date",
 		header: "Fecha de cierre",
 		cell: ({ row }) => {
-			return row.original.closing_date ? formatDateSchema(new Date(row.original.closing_date), 5) : '(En curso)';
+			return row.original?.closing_date ? format(new Date(row.original.closing_date), "dd/MM/yyyy hh:mm a") : '(En curso)';
 		}
 	},
 	{

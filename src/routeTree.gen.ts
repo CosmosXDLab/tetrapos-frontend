@@ -21,7 +21,7 @@ const ProductsLazyImport = createFileRoute('/products')()
 const PosLazyImport = createFileRoute('/pos')()
 const DashboardLazyImport = createFileRoute('/dashboard')()
 const CustomersLazyImport = createFileRoute('/customers')()
-const CashRegisterLazyImport = createFileRoute('/cash-register')()
+const CashJournalsLazyImport = createFileRoute('/cash-journals')()
 const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
@@ -51,10 +51,10 @@ const CustomersLazyRoute = CustomersLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/customers.lazy').then((d) => d.Route))
 
-const CashRegisterLazyRoute = CashRegisterLazyImport.update({
-  path: '/cash-register',
+const CashJournalsLazyRoute = CashJournalsLazyImport.update({
+  path: '/cash-journals',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/cash-register.lazy').then((d) => d.Route))
+} as any).lazy(() => import('./routes/cash-journals.lazy').then((d) => d.Route))
 
 const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
@@ -72,11 +72,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
-    '/cash-register': {
-      id: '/cash-register'
-      path: '/cash-register'
-      fullPath: '/cash-register'
-      preLoaderRoute: typeof CashRegisterLazyImport
+    '/cash-journals': {
+      id: '/cash-journals'
+      path: '/cash-journals'
+      fullPath: '/cash-journals'
+      preLoaderRoute: typeof CashJournalsLazyImport
       parentRoute: typeof rootRoute
     }
     '/customers': {
@@ -121,7 +121,7 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
-  CashRegisterLazyRoute,
+  CashJournalsLazyRoute,
   CustomersLazyRoute,
   DashboardLazyRoute,
   PosLazyRoute,
@@ -138,7 +138,7 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/cash-register",
+        "/cash-journals",
         "/customers",
         "/dashboard",
         "/pos",
@@ -149,8 +149,8 @@ export const routeTree = rootRoute.addChildren({
     "/": {
       "filePath": "index.lazy.tsx"
     },
-    "/cash-register": {
-      "filePath": "cash-register.lazy.tsx"
+    "/cash-journals": {
+      "filePath": "cash-journals.lazy.tsx"
     },
     "/customers": {
       "filePath": "customers.lazy.tsx"
