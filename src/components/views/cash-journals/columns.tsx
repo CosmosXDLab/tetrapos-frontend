@@ -8,6 +8,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { useState } from "react";
 import UpdateCashRegisterModal from "./UpdateCashJournalsModal";
 import { format } from "date-fns";
+import { LockIcon } from "@/components/icons";
 
 export const columns: ColumnDef<CashJournals>[] = [
     {
@@ -62,11 +63,11 @@ export const columns: ColumnDef<CashJournals>[] = [
 		
 			return (
 				<div className="flex gap-2">
-					<Button variant={"icon"} size={"icon"} onClick={() => handleOpenModal(true)}>
+					<Button variant={"icon"} size={"icon"}>
 						<ClosedEyeIcon className="fill-current" />
 					</Button>
-					<Button variant={"icon"} size={"icon"} onClick={() => handleOpenModal()}>
-						<PencilIcon className="fill-current" />
+					<Button variant={"icon"} size={"icon"} onClick={() => handleOpenModal()} disabled={!!row.original.closing_date}>
+						<LockIcon className="fill-current" />
 					</Button>
 
 					{isModalOpen && (

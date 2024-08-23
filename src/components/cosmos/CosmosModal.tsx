@@ -20,6 +20,7 @@ interface CosmosModalProps extends React.HTMLAttributes<HTMLDivElement> {
 	error?: string | null;
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
+	classNameBody?: string;
 }
 
 const CosmosModal = ({
@@ -64,7 +65,7 @@ const CosmosModal = ({
 				)}
 
 				<div
-					className={cn("grid items-center grid-cols-3 grid-rows-2 gap-6 p-6 border-y-2", footer ? "" : "border-t-2")}
+					className={cn(`grid items-center grid-cols-3 grid-rows-2 gap-6 p-6 border-y-2 ${props.classNameBody}` , footer ? "" : "border-t-2")}
 				>
 					{children}
 				</div>
