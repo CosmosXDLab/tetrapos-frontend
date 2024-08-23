@@ -13,3 +13,4 @@ export { default as NotificationIcon } from "./NotificationIcon";
 export { default as SuccessIcon } from "./SuccessIcon";
 export { default as CloseIcon } from "./CloseIcon";
 export { default as AlertIcon } from "./AlertIcon";
+export { default as LockIcon } from "./LockIcon";
