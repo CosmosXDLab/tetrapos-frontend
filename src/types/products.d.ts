@@ -1,3 +1,6 @@
+import type { CreateProductSchema } from "@/schemas/products/createProductSchema";
+import type { z } from "zod";
+
 export interface Product {
 	id: string;
 	code: string;
@@ -60,3 +63,5 @@ interface ProductStock {
 	total_stock: number;
 	consumed_stock: number;
 }
+
+export type CreateProduct = z.infer<typeof CreateProductSchema>;

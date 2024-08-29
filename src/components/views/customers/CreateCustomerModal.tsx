@@ -1,5 +1,4 @@
 import CosmosAlertDialog from "@/components/cosmos/CosmosAlertDialog";
-import CosmosCalendar from "@/components/cosmos/CosmosCalendar";
 import { CosmosInput } from "@/components/cosmos/CosmosInput";
 import CosmosModal from "@/components/cosmos/CosmosModal";
 import { CosmosSelect } from "@/components/cosmos/CosmosSelect";

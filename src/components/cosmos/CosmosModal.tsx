@@ -37,7 +37,7 @@ const CosmosModal = ({
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogTrigger asChild>{trigger}</DialogTrigger>
 
-			<DialogContent className={cn("sm:max-w-[700px] p-0 gap-0", className)} {...props}>
+			<DialogContent className={cn("sm:max-w-md md:max-w-[800px] p-0 gap-0", className)} {...props}>
 				{header ? (
 					<header className="flex items-center justify-between px-6 font-semibold h-14 text-texto">{header}</header>
 				) : (
