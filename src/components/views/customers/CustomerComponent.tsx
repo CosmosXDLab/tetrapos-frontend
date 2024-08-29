@@ -11,7 +11,7 @@ import { useGetAllCustomers, useGetCustomerById } from "@/hooks/useCustomer";
 import DeleteCustomer from "./DeleteCustomer";
 
 const CustomerView = () => {
-	const { data } = useGetAllCustomers();
+	const { data, isLoading } = useGetAllCustomers();
 	const [selectedRowsData, setSelectedRowsData] = useState<Record<string, Customer>>({});
 	const selectedIds = Object.values(selectedRowsData).map((row) => row.id);
 
@@ -38,7 +38,12 @@ const CustomerView = () => {
 				</Button>
 			</div>
 			<ScrollArea className="w-full h-[450px]">
-				<CustomDataTable columns={columns} data={data || []} onRowSelectionChange={setSelectedRowsData} />
+				<CustomDataTable
+					columns={columns}
+					data={data || []}
+					onRowSelectionChange={setSelectedRowsData}
+					loading={isLoading}
+				/>
 			</ScrollArea>
 		</div>
 	);

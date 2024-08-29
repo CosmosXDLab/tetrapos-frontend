@@ -8,7 +8,11 @@ const CustomDataTable = <TData extends { id: string | number }, TValue>({
 	columns,
 	data,
 	onRowSelectionChange, // New prop to notify parent component about selection changes
-}: DataTableProps<TData, TValue> & { onRowSelectionChange: (selected: Record<string, TData>) => void }) => {
+	loading,
+}: DataTableProps<TData, TValue> & {
+	onRowSelectionChange: (selected: Record<string, TData>) => void;
+	loading: boolean;
+}) => {
 	const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
 
 	const table = useReactTable({
@@ -66,9 +70,15 @@ const CustomDataTable = <TData extends { id: string | number }, TValue>({
 					))
 				) : (
 					<TableRow>
-						<TableCell colSpan={columns.length} className="h-24 text-center">
-							Sin resultados
-						</TableCell>
+						{loading ? (
+							<TableCell colSpan={columns.length} className="h-24 text-center">
+								Cargando...
+							</TableCell>
+						) : (
+							<TableCell colSpan={columns.length} className="h-24 text-center">
+								Sin resultados
+							</TableCell>
+						)}
 					</TableRow>
 				)}
 			</TableBody>

@@ -11,7 +11,7 @@ import CreateProductsModal from "./CreateProducts/CreateProductsModal";
 import DeleteProduct from "./DeleteProducts";
 
 const ProductsView = () => {
-	const { data } = useGetAllProducts();
+	const { data, isLoading } = useGetAllProducts();
 	const [selectedRowsData, setSelectedRowsData] = useState<Record<string, Product>>({});
 	const selectedIds = Object.values(selectedRowsData).map((row) => row.id);
 
@@ -38,7 +38,12 @@ const ProductsView = () => {
 				</Button>
 			</div>
 			<ScrollArea className="w-full h-[450px]">
-				<CustomDataTable columns={columns} data={data || []} onRowSelectionChange={setSelectedRowsData} />
+				<CustomDataTable
+					columns={columns}
+					data={data || []}
+					onRowSelectionChange={setSelectedRowsData}
+					loading={isLoading}
+				/>
 			</ScrollArea>
 		</div>
 	);
