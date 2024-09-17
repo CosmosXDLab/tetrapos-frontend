@@ -32,7 +32,7 @@ export const columns: ColumnDef<EntityCliente>[] = [
 		header: "Nombre o Razón social",
 		cell: ({ row }) => {
 			return (
-				<span className="font-semibold">
+				<span className="font">
 					{row.original.identification_document_type === "RUC"
 						? row.original.business_name
 						: `${row.original.first_names} ${row.original.last_names}`}

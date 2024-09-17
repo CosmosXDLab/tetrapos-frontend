@@ -123,15 +123,91 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({
-  IndexLazyRoute,
-  ClientesLazyRoute,
-  ConfiguracionLazyRoute,
-  DashboardLazyRoute,
-  DiarioDeCajaLazyRoute,
-  ProductosLazyRoute,
-  PuntoDeVentaLazyRoute,
-})
+export interface FileRoutesByFullPath {
+  '/': typeof IndexLazyRoute
+  '/clientes': typeof ClientesLazyRoute
+  '/configuracion': typeof ConfiguracionLazyRoute
+  '/dashboard': typeof DashboardLazyRoute
+  '/diario-de-caja': typeof DiarioDeCajaLazyRoute
+  '/productos': typeof ProductosLazyRoute
+  '/punto-de-venta': typeof PuntoDeVentaLazyRoute
+}
+
+export interface FileRoutesByTo {
+  '/': typeof IndexLazyRoute
+  '/clientes': typeof ClientesLazyRoute
+  '/configuracion': typeof ConfiguracionLazyRoute
+  '/dashboard': typeof DashboardLazyRoute
+  '/diario-de-caja': typeof DiarioDeCajaLazyRoute
+  '/productos': typeof ProductosLazyRoute
+  '/punto-de-venta': typeof PuntoDeVentaLazyRoute
+}
+
+export interface FileRoutesById {
+  __root__: typeof rootRoute
+  '/': typeof IndexLazyRoute
+  '/clientes': typeof ClientesLazyRoute
+  '/configuracion': typeof ConfiguracionLazyRoute
+  '/dashboard': typeof DashboardLazyRoute
+  '/diario-de-caja': typeof DiarioDeCajaLazyRoute
+  '/productos': typeof ProductosLazyRoute
+  '/punto-de-venta': typeof PuntoDeVentaLazyRoute
+}
+
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/clientes'
+    | '/configuracion'
+    | '/dashboard'
+    | '/diario-de-caja'
+    | '/productos'
+    | '/punto-de-venta'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/clientes'
+    | '/configuracion'
+    | '/dashboard'
+    | '/diario-de-caja'
+    | '/productos'
+    | '/punto-de-venta'
+  id:
+    | '__root__'
+    | '/'
+    | '/clientes'
+    | '/configuracion'
+    | '/dashboard'
+    | '/diario-de-caja'
+    | '/productos'
+    | '/punto-de-venta'
+  fileRoutesById: FileRoutesById
+}
+
+export interface RootRouteChildren {
+  IndexLazyRoute: typeof IndexLazyRoute
+  ClientesLazyRoute: typeof ClientesLazyRoute
+  ConfiguracionLazyRoute: typeof ConfiguracionLazyRoute
+  DashboardLazyRoute: typeof DashboardLazyRoute
+  DiarioDeCajaLazyRoute: typeof DiarioDeCajaLazyRoute
+  ProductosLazyRoute: typeof ProductosLazyRoute
+  PuntoDeVentaLazyRoute: typeof PuntoDeVentaLazyRoute
+}
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexLazyRoute: IndexLazyRoute,
+  ClientesLazyRoute: ClientesLazyRoute,
+  ConfiguracionLazyRoute: ConfiguracionLazyRoute,
+  DashboardLazyRoute: DashboardLazyRoute,
+  DiarioDeCajaLazyRoute: DiarioDeCajaLazyRoute,
+  ProductosLazyRoute: ProductosLazyRoute,
+  PuntoDeVentaLazyRoute: PuntoDeVentaLazyRoute,
+}
+
+export const routeTree = rootRoute
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
 
 /* prettier-ignore-end */
 

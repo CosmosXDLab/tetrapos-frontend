@@ -9,8 +9,8 @@ export const Route = createLazyFileRoute("/")({
 			{routesNavigators.map(({ icon: Icon, name, path }) => (
 				<Button key={randomKey()} variant={"homebutton"} size={"card"} asChild>
 					<Link to={path} className="flex items-center gap-2">
-						<Icon className="fill-current" width={32} />
-						{name}
+						<Icon className="fill-current" width={50} height={50}/>
+						<span style={{ fontSize: '16px' }}>{name}</span>
 					</Link>
 				</Button>
 			))}

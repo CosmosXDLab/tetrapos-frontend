@@ -64,6 +64,8 @@ const ModalCrearCliente = () => {
 		},
 	});
 
+	const { resetField} = form;
+
 	const { mutationResult: createClienteMutation } =
 		useHttpRequest<NewEntityCliente>(EndPoints.sales.clientes, keys.clientes, {
 			method: "POST",
@@ -149,7 +151,13 @@ const ModalCrearCliente = () => {
 								required
 								label="Tipo de documento"
 								options={options.documento}
-								onValueChange={field.onChange}
+								onValueChange={(value) => {
+									field.onChange(value);
+									resetField("identification_document_number");
+									resetField("first_names");
+									resetField("last_names");
+									resetField("business_name");
+								}}
 								{...field}
 							/>
 						</div>
@@ -166,6 +174,10 @@ const ModalCrearCliente = () => {
 								required
 								type="text"
 								label="Número de documento"
+								maxLength={form.watch("identification_document_type") === "DNI" ? 8 : 11}
+								onInput={(e) => {
+									e.currentTarget.value = e.currentTarget.value.replace(/\D/g, '');
+								}}
 								{...field}
 							/>
 						</div>
@@ -297,6 +309,10 @@ const ModalCrearCliente = () => {
 								showLabel
 								type="text"
 								label="Nro. Celular"
+								maxLength={9}
+								onInput={(e) => {
+									e.currentTarget.value = e.currentTarget.value.replace(/\D/g, '');
+								}}
 								{...field}
 							/>
 						</div>

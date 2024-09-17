@@ -30,7 +30,7 @@ const CustomDataTable = <TData, TValue>({
 			rowSelection,
 		},
 	});
-
+	// cambios aquí para static
 	return (
 		<Table className="table-container">
 			<TableHeader>
