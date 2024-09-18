@@ -7,14 +7,22 @@ import type { Customer } from "@/types";
 import { useState } from "react";
 import CreateCustomerModal from "./CreateCustomerModal";
 import { columns } from "./columns";
-import { useGetAllCustomers, useGetCustomerById } from "@/hooks/useCustomer";
+import { useGetAllCustomers } from "@/hooks/useCustomer";
 import DeleteCustomer from "./DeleteCustomer";
-import { useDeleteProduct, useGetAllProducts, useGetProductById } from "@/hooks/useProducts";
+import { JsonToCsv } from "@/lib/jsonToCsv";
+import CosmosModal from "@/components/cosmos/CosmosModal";
 
 const CustomerView = () => {
 	const { data } = useGetAllCustomers();
 	const [selectedRowsData, setSelectedRowsData] = useState<Record<string, Customer>>({});
+	const [showConfirmDownload, setShowConfirmDownload] = useState<boolean>(false);
 	const selectedIds = Object.values(selectedRowsData).map((row) => row.id);
+
+	const exportData = () => {
+		if (!data || data?.length === 0) return;
+		JsonToCsv.exec(data, `customers-${Date.now().toString()}`); 
+		setShowConfirmDownload(false)
+	}
 
 	return (
 		<div className="flex flex-col w-full h-full gap-5 px-12 py-12">
@@ -34,9 +42,23 @@ const CustomerView = () => {
 						// onChange={(e) => handleInputChange("buscar", e.target.value)}
 					/>
 				</div>
-				<Button variant={"icon"} size={"icon"}>
+				<Button variant={"icon"} size={"icon"} onClick={() => setShowConfirmDownload(true)}>
 					<FilterIcon className="fill-current" />
 				</Button>
+				<CosmosModal 
+					children={<p className="text-sm">¿Deseas generar este reporte?</p>}
+					onOpenChange={() => setShowConfirmDownload(!showConfirmDownload)}
+					open={showConfirmDownload}
+					title="Confirmar"
+					footer={
+						<div className="flex justify-end gap-2">
+							<Button variant="decline" onClick={() => setShowConfirmDownload(false)}>No</Button>
+							<Button variant="accept" onClick={() => exportData()}>
+								Si
+							</Button>
+						</div>
+					}
+				/>
 			</div>
 			<ScrollArea className="w-full h-[450px]">
 				<CustomDataTable columns={columns} data={data || []} onRowSelectionChange={setSelectedRowsData} />
