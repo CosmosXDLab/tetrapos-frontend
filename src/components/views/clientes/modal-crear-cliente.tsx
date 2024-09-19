@@ -22,6 +22,7 @@ import { AlertDialogAction } from "@radix-ui/react-alert-dialog";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
+
 const options = {
 	documento: [
 		{ value: "DNI", label: "DNI" },
@@ -45,6 +46,8 @@ const ModalCrearCliente = () => {
 	const [alertOpen, setAlertOpen] = useState(false);
 	const [modalOpen, setModalOpen] = useState(false);
 	const [error, setError] = useState<string | null>(null);
+	const [isSubmitting, setIsSubmitting] = useState(false);
+
 
 	const form = useForm<CreateClienteType>({
 		resolver: zodResolver(CreateClienteSchema),
@@ -73,6 +76,7 @@ const ModalCrearCliente = () => {
 		});
 
 	const onSubmit = () => {
+		setIsSubmitting(true); // Iniciar el estado de envío
 		createClienteMutation
 			.mutateAsync()
 			.then(() => {
@@ -88,12 +92,16 @@ const ModalCrearCliente = () => {
 			.catch((error: any) => {
 				setError(error.message);
 				setAlertOpen(false);
+			})
+			.finally(() => {
+				setIsSubmitting(false); // Finalizar el estado de envío
 			});
 	};
 
 	const onError = () => {
 		setAlertOpen(false);
 		setError("Por favor, revisa los campos del formulario.");
+		setIsSubmitting(false); //Se finaliza el estado de envío en caso de error
 	};
 
 	return (
@@ -104,30 +112,36 @@ const ModalCrearCliente = () => {
 			open={modalOpen}
 			onOpenChange={setModalOpen}
 			trigger={
-				<Button variant="icon" size="icon">
+				<Button variant="icon" size="icon" disabled={alertOpen || isSubmitting}>
 					<PlusIcon className="fill-current" />
 				</Button>
 			}
 			footer={
 				<div className="flex justify-end gap-2">
 					<DialogClose asChild>
-						<Button variant="decline">Cancelar</Button>
+						<Button variant="decline" disabled={isSubmitting}>Cancelar</Button>
 					</DialogClose>
 					<CosmosAlertDialog
 						open={alertOpen}
-						onOpenChange={setAlertOpen}
+						onOpenChange={(open) => {
+							setAlertOpen(open);
+							if (!open) {
+								setIsSubmitting(false); // Rehabilitar el botón si se cierra el diálogo
+								}
+							}}
 						className="w-[500px] h-auto"
 						title="Confirmación"
-						trigger={<Button variant="accept">Guardar</Button>}
+						trigger={<Button variant="accept" disabled={alertOpen || isSubmitting}>Guardar</Button>}
 						footer={
 							<div className="flex justify-end gap-2">
 								<AlertDialogCancel asChild>
-									<Button variant="decline">No</Button>
+									<Button variant="decline" disabled={isSubmitting}>No</Button>
 								</AlertDialogCancel>
 								<AlertDialogAction asChild>
 									<Button
 										variant="accept"
 										onClick={form.handleSubmit(onSubmit, onError)}
+										disabled={isSubmitting}
 									>
 										Si
 									</Button>
