@@ -13,6 +13,7 @@ import { useModal } from "@/hooks/useModal";
 import { CreateCustomerSchema } from "@/schemas/customer/createCustomerSchema";
 import type { CreateCustomer } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { type FieldErrors, useForm } from "react-hook-form";
 
 const options = {
@@ -36,6 +37,7 @@ const options = {
 
 const CreateCustomerModal = () => {
 	const { isOpen: modalOpen, error, onOpenChange: onModalOpenChange, setModalError } = useModal();
+	const [isSubmitting, setIsSubmitting] = useState(false); // Cambio a
 
 	const { isOpen: alertOpen, onOpenChange: onAlertOpenChange } = useModal();
 
@@ -59,7 +61,10 @@ const CreateCustomerModal = () => {
 		},
 	});
 
+	const { resetField } = form; // Desestructurar resetField para usarlo más abajo (1)
+
 	const onSubmit = async (values: CreateCustomer) => {
+		setIsSubmitting(true); // Cambio b
 		try {
 			await mutateCreateCustomer(values);
 			onAlertOpenChange(false);
@@ -73,6 +78,7 @@ const CreateCustomerModal = () => {
 			onAlertOpenChange(false);
 			setModalError((error as Error).message);
 		}
+		setIsSubmitting(false); // Cambio c
 	};
 
 	const onError = (errors: FieldErrors) => {
@@ -80,6 +86,7 @@ const CreateCustomerModal = () => {
 
 		onAlertOpenChange(false);
 		setModalError("Por favor, revisa los campos del formulario.");
+		setIsSubmitting(false); // Cambio d
 	};
 
 	return (
@@ -91,28 +98,29 @@ const CreateCustomerModal = () => {
 			open={modalOpen}
 			onOpenChange={onModalOpenChange}
 			trigger={
-				<Button variant="icon" size="icon">
+				// Cambio e
+				<Button variant="icon" size="icon" disabled={alertOpen || isSubmitting}>
 					<PlusIcon className="fill-current" />
 				</Button>
 			}
 			footer={
 				<div className="flex justify-end gap-2">
 					<DialogClose asChild>
-						<Button variant="decline">Cancelar</Button>
+						<Button variant="decline" disabled={isSubmitting}>Cancelar</Button>
 					</DialogClose>
 					<CosmosAlertDialog
 						open={alertOpen}
 						onOpenChange={onAlertOpenChange}
 						className="w-[500px] h-auto"
 						title="Confirmación"
-						trigger={<Button variant="accept">Guardar</Button>}
+						trigger={<Button variant="accept" disabled={alertOpen || isSubmitting}>Guardar</Button>}
 						footer={
 							<div className="flex justify-end gap-2">
 								<AlertDialogCancel asChild>
-									<Button variant="decline">No</Button>
+									<Button variant="decline" disabled={isSubmitting}>No</Button>
 								</AlertDialogCancel>
 								<AlertDialogAction asChild>
-									<Button variant="accept" onClick={form.handleSubmit(onSubmit, onError)}>
+									<Button variant="accept" onClick={form.handleSubmit(onSubmit, onError)} disabled={isSubmitting}>
 										Si
 									</Button>
 								</AlertDialogAction>
@@ -135,7 +143,14 @@ const CreateCustomerModal = () => {
 								required
 								label="Tipo de documento"
 								options={options.documento}
-								onValueChange={field.onChange}
+								onValueChange={(value) => {
+									field.onChange(value); // Actualizar el tipo de documento en el formulario (2)
+									// Reseteamos los campos correspondientes al cambiar el tipo de documento (3)
+									resetField("identification_document_number");
+									resetField("business_name");
+									resetField("first_names");
+									resetField("last_names");
+								}}
 								{...field}
 							/>
 						</div>
@@ -147,7 +162,13 @@ const CreateCustomerModal = () => {
 					name="identification_document_number"
 					render={({ field }) => (
 						<div className="col-span-1">
-							<CosmosInput showLabel required type="text" label="Número de documento" {...field} />
+							<CosmosInput showLabel required type="text" label="Número de documento"
+							// Permitir solo números y restringir extensión (1,2)
+							maxLength={form.watch("identification_document_type") === "DNI" ? 8 : 11}
+							onInput={(e) => {
+								e.currentTarget.value = e.currentTarget.value.replace(/\D/g, '');
+							}}
+							{...field} />
 						</div>
 					)}
 				/>
@@ -255,7 +276,13 @@ const CreateCustomerModal = () => {
 					name="phone_number"
 					render={({ field }) => (
 						<div className="col-span-1">
-							<CosmosInput showLabel type="text" label="Nro. Celular" {...field} />
+							<CosmosInput showLabel type="text" label="Nro. Celular" 
+							// Permitir solo números y restringir extensión (1,2)
+							maxLength={9}
+							onInput={(e) => {
+								e.currentTarget.value = e.currentTarget.value.replace(/\D/g, '');
+							}}
+							{...field} />
 						</div>
 					)}
 				/>

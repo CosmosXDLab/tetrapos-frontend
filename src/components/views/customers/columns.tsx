@@ -40,7 +40,7 @@ export const columns: ColumnDef<Customer>[] = [
 		header: "Nombre o Razón social",
 		cell: ({ row }) => {
 			return (
-				<span className="font-semibold">
+				<span className="font"> {/* Modificación de columna en negrita */}
 					{row.original.identification_document_type === "RUC"
 						? row.original.business_name
 						: `${row.original.first_names} ${row.original.last_names}`}
