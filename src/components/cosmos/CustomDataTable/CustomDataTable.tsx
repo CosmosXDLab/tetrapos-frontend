@@ -3,6 +3,7 @@ import type { DataTableProps } from "./types";
 import "./CustomDataTable.css";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useEffect, useMemo, useState } from "react";
+import CosmosLoader from "../CustomLoader/CosmosLoader";
 
 const CustomDataTable = <TData extends { id: string | number }, TValue>({
 	columns,
@@ -58,7 +59,15 @@ const CustomDataTable = <TData extends { id: string | number }, TValue>({
 				))}
 			</TableHeader>
 			<TableBody>
-				{table.getRowModel().rows?.length ? (
+				{loading ? (
+					<TableRow>
+						<TableCell colSpan={columns.length} className="h-96">
+							<div className="flex items-center justify-center">
+								<CosmosLoader />
+							</div>
+						</TableCell>
+					</TableRow>
+				) : table.getRowModel().rows?.length ? (
 					table.getRowModel().rows.map((row) => (
 						<TableRow className="table-body-row" key={row.id} data-state={row.getIsSelected() && "selected"}>
 							{row.getVisibleCells().map((cell) => (
@@ -70,15 +79,9 @@ const CustomDataTable = <TData extends { id: string | number }, TValue>({
 					))
 				) : (
 					<TableRow>
-						{loading ? (
-							<TableCell colSpan={columns.length} className="h-24 text-center">
-								Cargando...
-							</TableCell>
-						) : (
-							<TableCell colSpan={columns.length} className="h-24 text-center">
-								Sin resultados
-							</TableCell>
-						)}
+						<TableCell colSpan={columns.length} className="h-24 text-center">
+							Sin resultados
+						</TableCell>
 					</TableRow>
 				)}
 			</TableBody>

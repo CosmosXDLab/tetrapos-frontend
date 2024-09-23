@@ -12,9 +12,10 @@ import { CreateProductSchema } from "@/schemas/products/createProductSchema";
 import type { CreateProduct } from "@/types/products";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type FieldErrors, useForm } from "react-hook-form";
-import GeneralTab from "./TabsViews/GeneralTab";
-import ControllerTab from "./TabsViews/ControllerTab";
-import BarcodesTab from "./TabsViews/BarcodesTab";
+import BarcodesTab from "./BarcodesTab";
+import ControllerTab from "./ControllerTab";
+import GeneralTab from "./GeneralTab";
+import LocationsTab from "./LocationsTab";
 
 const CreateProductsModal = () => {
 	const { isOpen: modalOpen, error, onOpenChange: onModalOpenChange, setModalError } = useModal();
@@ -94,7 +95,7 @@ const CreateProductsModal = () => {
 						options={[
 							{ value: "general", label: "General", content: <GeneralTab form={form} /> },
 							{ value: "controlador", label: "Controlador", content: <ControllerTab form={form} /> },
-							{ value: "ubicaciones", label: "Ubicaciones", content: <div>Ubicaciones</div> },
+							{ value: "ubicaciones", label: "Ubicaciones", content: <LocationsTab /> },
 							{ value: "codigo_barras", label: "Código de Barras", content: <BarcodesTab /> },
 							{ value: "precios", label: "Precios", content: <div>Precios</div> },
 							{ value: "ensamblado", label: "Ensamblado", content: <div>Ensamblado</div> },

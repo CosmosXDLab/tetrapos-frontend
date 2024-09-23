@@ -119,15 +119,91 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({
-  IndexLazyRoute,
-  CashRegisterLazyRoute,
-  CustomersLazyRoute,
-  DashboardLazyRoute,
-  PosLazyRoute,
-  ProductsLazyRoute,
-  SettingsLazyRoute,
-})
+export interface FileRoutesByFullPath {
+  '/': typeof IndexLazyRoute
+  '/cash-register': typeof CashRegisterLazyRoute
+  '/customers': typeof CustomersLazyRoute
+  '/dashboard': typeof DashboardLazyRoute
+  '/pos': typeof PosLazyRoute
+  '/products': typeof ProductsLazyRoute
+  '/settings': typeof SettingsLazyRoute
+}
+
+export interface FileRoutesByTo {
+  '/': typeof IndexLazyRoute
+  '/cash-register': typeof CashRegisterLazyRoute
+  '/customers': typeof CustomersLazyRoute
+  '/dashboard': typeof DashboardLazyRoute
+  '/pos': typeof PosLazyRoute
+  '/products': typeof ProductsLazyRoute
+  '/settings': typeof SettingsLazyRoute
+}
+
+export interface FileRoutesById {
+  __root__: typeof rootRoute
+  '/': typeof IndexLazyRoute
+  '/cash-register': typeof CashRegisterLazyRoute
+  '/customers': typeof CustomersLazyRoute
+  '/dashboard': typeof DashboardLazyRoute
+  '/pos': typeof PosLazyRoute
+  '/products': typeof ProductsLazyRoute
+  '/settings': typeof SettingsLazyRoute
+}
+
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/cash-register'
+    | '/customers'
+    | '/dashboard'
+    | '/pos'
+    | '/products'
+    | '/settings'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/cash-register'
+    | '/customers'
+    | '/dashboard'
+    | '/pos'
+    | '/products'
+    | '/settings'
+  id:
+    | '__root__'
+    | '/'
+    | '/cash-register'
+    | '/customers'
+    | '/dashboard'
+    | '/pos'
+    | '/products'
+    | '/settings'
+  fileRoutesById: FileRoutesById
+}
+
+export interface RootRouteChildren {
+  IndexLazyRoute: typeof IndexLazyRoute
+  CashRegisterLazyRoute: typeof CashRegisterLazyRoute
+  CustomersLazyRoute: typeof CustomersLazyRoute
+  DashboardLazyRoute: typeof DashboardLazyRoute
+  PosLazyRoute: typeof PosLazyRoute
+  ProductsLazyRoute: typeof ProductsLazyRoute
+  SettingsLazyRoute: typeof SettingsLazyRoute
+}
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexLazyRoute: IndexLazyRoute,
+  CashRegisterLazyRoute: CashRegisterLazyRoute,
+  CustomersLazyRoute: CustomersLazyRoute,
+  DashboardLazyRoute: DashboardLazyRoute,
+  PosLazyRoute: PosLazyRoute,
+  ProductsLazyRoute: ProductsLazyRoute,
+  SettingsLazyRoute: SettingsLazyRoute,
+}
+
+export const routeTree = rootRoute
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
 
 /* prettier-ignore-end */
 

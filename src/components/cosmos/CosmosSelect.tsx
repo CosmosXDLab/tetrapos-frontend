@@ -1,7 +1,7 @@
+import { ChevronDownIcon } from "@radix-ui/react-icons";
 import React from "react";
 import { Label } from "../ui/label";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../ui/select";
-import { ChevronDownIcon } from "@radix-ui/react-icons";
 
 interface SelectOptions {
 	value: string;
@@ -11,7 +11,7 @@ interface SelectOptions {
 interface BaseSelectProps {
 	id?: string;
 	required?: boolean;
-	showLabel: boolean;
+	showLabel?: boolean;
 	label?: string;
 	placeholder?: string;
 	selectLabel?: string;
@@ -25,22 +25,20 @@ interface BaseSelectProps {
 export type SelectProps = BaseSelectProps;
 
 const CosmosSelect = React.forwardRef<HTMLDivElement, SelectProps>(
-	(
-		{
-			id,
-			required,
-			label,
-			placeholder,
-			showLabel,
-			selectLabel,
-			options,
-			icon,
-			disabled = false,
-			defaultValue,
-			onValueChange,
-			...props
-		}
-	) => {
+	({
+		id,
+		required,
+		label,
+		placeholder,
+		showLabel,
+		selectLabel,
+		options,
+		icon,
+		disabled = false,
+		defaultValue,
+		onValueChange,
+		...props
+	}) => {
 		const handleValueChange = (value: string) => {
 			if (!disabled && onValueChange) {
 				onValueChange(value);
