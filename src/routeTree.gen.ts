@@ -16,15 +16,22 @@ import { Route as rootRoute } from './routes/__root'
 
 // Create Virtual Routes
 
+const WarehousesLazyImport = createFileRoute('/warehouses')()
 const SettingsLazyImport = createFileRoute('/settings')()
 const ProductsLazyImport = createFileRoute('/products')()
 const PosLazyImport = createFileRoute('/pos')()
+const GuidesLazyImport = createFileRoute('/guides')()
 const DashboardLazyImport = createFileRoute('/dashboard')()
 const CustomersLazyImport = createFileRoute('/customers')()
 const CashJournalsLazyImport = createFileRoute('/cash-journals')()
 const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
+
+const WarehousesLazyRoute = WarehousesLazyImport.update({
+  path: '/warehouses',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/warehouses.lazy').then((d) => d.Route))
 
 const SettingsLazyRoute = SettingsLazyImport.update({
   path: '/settings',
@@ -40,6 +47,11 @@ const PosLazyRoute = PosLazyImport.update({
   path: '/pos',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/pos.lazy').then((d) => d.Route))
+
+const GuidesLazyRoute = GuidesLazyImport.update({
+  path: '/guides',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/guides.lazy').then((d) => d.Route))
 
 const DashboardLazyRoute = DashboardLazyImport.update({
   path: '/dashboard',
@@ -93,6 +105,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLazyImport
       parentRoute: typeof rootRoute
     }
+    '/guides': {
+      id: '/guides'
+      path: '/guides'
+      fullPath: '/guides'
+      preLoaderRoute: typeof GuidesLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/pos': {
       id: '/pos'
       path: '/pos'
@@ -114,20 +133,119 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsLazyImport
       parentRoute: typeof rootRoute
     }
+    '/warehouses': {
+      id: '/warehouses'
+      path: '/warehouses'
+      fullPath: '/warehouses'
+      preLoaderRoute: typeof WarehousesLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({
-  IndexLazyRoute,
-  CashJournalsLazyRoute,
-  CustomersLazyRoute,
-  DashboardLazyRoute,
-  PosLazyRoute,
-  ProductsLazyRoute,
-  SettingsLazyRoute,
-})
+export interface FileRoutesByFullPath {
+  '/': typeof IndexLazyRoute
+  '/cash-journals': typeof CashJournalsLazyRoute
+  '/customers': typeof CustomersLazyRoute
+  '/dashboard': typeof DashboardLazyRoute
+  '/guides': typeof GuidesLazyRoute
+  '/pos': typeof PosLazyRoute
+  '/products': typeof ProductsLazyRoute
+  '/settings': typeof SettingsLazyRoute
+  '/warehouses': typeof WarehousesLazyRoute
+}
+
+export interface FileRoutesByTo {
+  '/': typeof IndexLazyRoute
+  '/cash-journals': typeof CashJournalsLazyRoute
+  '/customers': typeof CustomersLazyRoute
+  '/dashboard': typeof DashboardLazyRoute
+  '/guides': typeof GuidesLazyRoute
+  '/pos': typeof PosLazyRoute
+  '/products': typeof ProductsLazyRoute
+  '/settings': typeof SettingsLazyRoute
+  '/warehouses': typeof WarehousesLazyRoute
+}
+
+export interface FileRoutesById {
+  __root__: typeof rootRoute
+  '/': typeof IndexLazyRoute
+  '/cash-journals': typeof CashJournalsLazyRoute
+  '/customers': typeof CustomersLazyRoute
+  '/dashboard': typeof DashboardLazyRoute
+  '/guides': typeof GuidesLazyRoute
+  '/pos': typeof PosLazyRoute
+  '/products': typeof ProductsLazyRoute
+  '/settings': typeof SettingsLazyRoute
+  '/warehouses': typeof WarehousesLazyRoute
+}
+
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/cash-journals'
+    | '/customers'
+    | '/dashboard'
+    | '/guides'
+    | '/pos'
+    | '/products'
+    | '/settings'
+    | '/warehouses'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/cash-journals'
+    | '/customers'
+    | '/dashboard'
+    | '/guides'
+    | '/pos'
+    | '/products'
+    | '/settings'
+    | '/warehouses'
+  id:
+    | '__root__'
+    | '/'
+    | '/cash-journals'
+    | '/customers'
+    | '/dashboard'
+    | '/guides'
+    | '/pos'
+    | '/products'
+    | '/settings'
+    | '/warehouses'
+  fileRoutesById: FileRoutesById
+}
+
+export interface RootRouteChildren {
+  IndexLazyRoute: typeof IndexLazyRoute
+  CashJournalsLazyRoute: typeof CashJournalsLazyRoute
+  CustomersLazyRoute: typeof CustomersLazyRoute
+  DashboardLazyRoute: typeof DashboardLazyRoute
+  GuidesLazyRoute: typeof GuidesLazyRoute
+  PosLazyRoute: typeof PosLazyRoute
+  ProductsLazyRoute: typeof ProductsLazyRoute
+  SettingsLazyRoute: typeof SettingsLazyRoute
+  WarehousesLazyRoute: typeof WarehousesLazyRoute
+}
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexLazyRoute: IndexLazyRoute,
+  CashJournalsLazyRoute: CashJournalsLazyRoute,
+  CustomersLazyRoute: CustomersLazyRoute,
+  DashboardLazyRoute: DashboardLazyRoute,
+  GuidesLazyRoute: GuidesLazyRoute,
+  PosLazyRoute: PosLazyRoute,
+  ProductsLazyRoute: ProductsLazyRoute,
+  SettingsLazyRoute: SettingsLazyRoute,
+  WarehousesLazyRoute: WarehousesLazyRoute,
+}
+
+export const routeTree = rootRoute
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
 
 /* prettier-ignore-end */
 
@@ -141,9 +259,11 @@ export const routeTree = rootRoute.addChildren({
         "/cash-journals",
         "/customers",
         "/dashboard",
+        "/guides",
         "/pos",
         "/products",
-        "/settings"
+        "/settings",
+        "/warehouses"
       ]
     },
     "/": {
@@ -158,6 +278,9 @@ export const routeTree = rootRoute.addChildren({
     "/dashboard": {
       "filePath": "dashboard.lazy.tsx"
     },
+    "/guides": {
+      "filePath": "guides.lazy.tsx"
+    },
     "/pos": {
       "filePath": "pos.lazy.tsx"
     },
@@ -166,6 +289,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/settings": {
       "filePath": "settings.lazy.tsx"
+    },
+    "/warehouses": {
+      "filePath": "warehouses.lazy.tsx"
     }
   }
 }
