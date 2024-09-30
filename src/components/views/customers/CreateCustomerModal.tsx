@@ -13,7 +13,6 @@ import { useModal } from "@/hooks/useModal";
 import { CreateCustomerSchema } from "@/schemas/customer/createCustomerSchema";
 import type { CreateCustomer } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
 import { type FieldErrors, useForm } from "react-hook-form";
 
 const options = {
@@ -37,11 +36,9 @@ const options = {
 
 const CreateCustomerModal = () => {
 	const { isOpen: modalOpen, error, onOpenChange: onModalOpenChange, setModalError } = useModal();
-	const [isSubmitting, setIsSubmitting] = useState(false); // Cambio a
-
 	const { isOpen: alertOpen, onOpenChange: onAlertOpenChange } = useModal();
 
-	const { mutateAsync: mutateCreateCustomer } = useCreateCustomer();
+	const { mutateAsync: mutateCreateCustomer, isPending } = useCreateCustomer(); // (a) Obtener valores de estado de useCreateCustomer
 
 	const form = useForm<CreateCustomer>({
 		resolver: zodResolver(CreateCustomerSchema),
@@ -61,10 +58,9 @@ const CreateCustomerModal = () => {
 		},
 	});
 
-	const { resetField } = form; // Desestructurar resetField para usarlo más abajo (1)
+	const { resetField } = form; // (1) Desestructurar resetField para usarlo más abajo
 
 	const onSubmit = async (values: CreateCustomer) => {
-		setIsSubmitting(true); // Cambio b
 		try {
 			await mutateCreateCustomer(values);
 			onAlertOpenChange(false);
@@ -78,7 +74,6 @@ const CreateCustomerModal = () => {
 			onAlertOpenChange(false);
 			setModalError((error as Error).message);
 		}
-		setIsSubmitting(false); // Cambio c
 	};
 
 	const onError = (errors: FieldErrors) => {
@@ -86,7 +81,6 @@ const CreateCustomerModal = () => {
 
 		onAlertOpenChange(false);
 		setModalError("Por favor, revisa los campos del formulario.");
-		setIsSubmitting(false); // Cambio d
 	};
 
 	return (
@@ -98,29 +92,29 @@ const CreateCustomerModal = () => {
 			open={modalOpen}
 			onOpenChange={onModalOpenChange}
 			trigger={
-				// Cambio e
-				<Button variant="icon" size="icon" disabled={alertOpen || isSubmitting}>
+				// (a)  Deshabilitar botón si isPending o alertOpen están activos
+				<Button variant="icon" size="icon" disabled={alertOpen || isPending}>
 					<PlusIcon className="fill-current" />
 				</Button>
 			}
 			footer={
 				<div className="flex justify-end gap-2">
 					<DialogClose asChild>
-						<Button variant="decline" disabled={isSubmitting}>Cancelar</Button>
+						<Button variant="decline" disabled={isPending}>Cancelar</Button>
 					</DialogClose>
 					<CosmosAlertDialog
 						open={alertOpen}
 						onOpenChange={onAlertOpenChange}
 						className="w-[500px] h-auto"
 						title="Confirmación"
-						trigger={<Button variant="accept" disabled={alertOpen || isSubmitting}>Guardar</Button>}
+						trigger={<Button variant="accept" disabled={alertOpen || isPending}>Guardar</Button>}
 						footer={
 							<div className="flex justify-end gap-2">
 								<AlertDialogCancel asChild>
-									<Button variant="decline" disabled={isSubmitting}>No</Button>
+									<Button variant="decline" disabled={isPending}>No</Button>
 								</AlertDialogCancel>
 								<AlertDialogAction asChild>
-									<Button variant="accept" onClick={form.handleSubmit(onSubmit, onError)} disabled={isSubmitting}>
+									<Button variant="accept" onClick={form.handleSubmit(onSubmit, onError)} disabled={isPending}>
 										Si
 									</Button>
 								</AlertDialogAction>
