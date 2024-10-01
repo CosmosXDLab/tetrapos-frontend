@@ -62,10 +62,7 @@ const columns: ColumnDef<BarcodeData>[] = [
 			<Checkbox
 				className={cn(row.getIsSelected() ? "border-none" : "")}
 				disabled
-				checked={row.getIsSelected()}
-				onCheckedChange={(value) => {
-					row.toggleSelected(!!value);
-				}}
+				checked={row.getValue("principal")}
 				aria-label="Seleccionar fila"
 			/>
 		),

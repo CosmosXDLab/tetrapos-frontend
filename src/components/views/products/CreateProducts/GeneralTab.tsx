@@ -4,12 +4,57 @@ import { TrashIcon } from "@/components/icons";
 import PencilIcon from "@/components/icons/PencilIcon";
 import { Button } from "@/components/ui/button";
 import { FormField } from "@/components/ui/form";
-import { useRef, useState } from "react";
-import placeholder from "/placeholder.jpg";
+import { useGetAllProductsCategories } from "@/hooks/useProductsCategories";
+import { useGetAllProductsFamilies } from "@/hooks/useProductsFamilies";
+import { useGetAllProductsMeasurement } from "@/hooks/useProductsMeasurement";
 import type { CreateProduct } from "@/types/products";
+import { useRef, useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
+import placeholder from "/placeholder.jpg";
+
+interface SelectOption {
+	id: string;
+	code: string;
+	name: string;
+	description?: string;
+}
+
+interface Field {
+	onChange: (value: unknown) => void;
+}
+
+const options = {
+	kind: [
+		{ value: "Reventa", label: "Reventa" },
+		{ value: "Producción", label: "Producción" },
+	],
+	classification: [
+		{ value: "Artículo único", label: "Artículo único" },
+		{ value: "Artículo compuesto", label: "Artículo compuesto" },
+	],
+};
 
 const GeneralTab = ({ form }: { form: UseFormReturn<CreateProduct, undefined> }) => {
+	const { data: categories } = useGetAllProductsCategories();
+	const { data: families } = useGetAllProductsFamilies();
+	const { data: measurementUnits } = useGetAllProductsMeasurement();
+
+	const handleTransform = (array: SelectOption[] | undefined) => {
+		return array?.map((item) => ({ value: item.code, label: item.name })) || [];
+	};
+
+	const handleSelectChange = (value: string, array: SelectOption[] | undefined, field: Field) => {
+		const selectedItem = array?.find((item) => item.code === value);
+		if (selectedItem) {
+			field.onChange({
+				id: selectedItem.id,
+				code: selectedItem.code,
+				name: selectedItem.name,
+				description: selectedItem.description || "",
+			});
+		}
+	};
+
 	const [image, setImage] = useState<string | null>();
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -66,7 +111,14 @@ const GeneralTab = ({ form }: { form: UseFormReturn<CreateProduct, undefined> })
 					name="kind"
 					render={({ field }) => (
 						<div className="col-span-1">
-							<CosmosSelect showLabel required label="Tipo" {...field} />
+							<CosmosSelect
+								{...field}
+								showLabel
+								required
+								label="Tipo"
+								onValueChange={field.onChange}
+								options={options.kind}
+							/>
 						</div>
 					)}
 				/>
@@ -76,7 +128,14 @@ const GeneralTab = ({ form }: { form: UseFormReturn<CreateProduct, undefined> })
 					name="classification"
 					render={({ field }) => (
 						<div className="col-span-1">
-							<CosmosSelect showLabel required label="Clasificación" {...field} />
+							<CosmosSelect
+								{...field}
+								showLabel
+								required
+								label="Clasificación"
+								onValueChange={field.onChange}
+								options={options.classification}
+							/>
 						</div>
 					)}
 				/>
@@ -85,9 +144,13 @@ const GeneralTab = ({ form }: { form: UseFormReturn<CreateProduct, undefined> })
 					control={form.control}
 					name="product_category"
 					render={({ field }) => (
-						<div className="col-span-1">
-							<CosmosSelect showLabel required label="Categoría" {...field} />
-						</div>
+						<CosmosSelect
+							showLabel
+							required
+							label="Categoría"
+							onValueChange={(value) => handleSelectChange(value, categories, field)}
+							options={handleTransform(categories)}
+						/>
 					)}
 				/>
 
@@ -96,7 +159,13 @@ const GeneralTab = ({ form }: { form: UseFormReturn<CreateProduct, undefined> })
 					name="product_family"
 					render={({ field }) => (
 						<div className="col-span-1">
-							<CosmosSelect showLabel required label="Familia" {...field} />
+							<CosmosSelect
+								showLabel
+								required
+								label="Familia"
+								onValueChange={(value) => handleSelectChange(value, families, field)}
+								options={handleTransform(families)}
+							/>
 						</div>
 					)}
 				/>
@@ -106,7 +175,13 @@ const GeneralTab = ({ form }: { form: UseFormReturn<CreateProduct, undefined> })
 					name="measurement_unit"
 					render={({ field }) => (
 						<div className="col-span-1">
-							<CosmosSelect showLabel required label="Unidad de medida" {...field} />
+							<CosmosSelect
+								showLabel
+								required
+								label="Unidad de medida"
+								onValueChange={(value) => handleSelectChange(value, measurementUnits, field)}
+								options={handleTransform(measurementUnits)}
+							/>
 						</div>
 					)}
 				/>

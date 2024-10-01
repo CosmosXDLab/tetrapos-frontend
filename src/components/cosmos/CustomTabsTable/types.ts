@@ -3,6 +3,7 @@ import type { Column, ColumnDef, Getter, Row, RowData, Table } from "@tanstack/r
 declare module "@tanstack/react-table" {
 	interface TableMeta<TData extends RowData> {
 		updateData: (rowIndex: number, columnId: string, value: unknown) => void;
+		updateNewRowData: (columnId: string, value: unknown) => void;
 	}
 
 	interface ColumnMeta<TData extends RowData, TValue> {
@@ -17,8 +18,8 @@ export interface TabsTableProps<TData, TValue> {
 }
 
 export interface EditableCellProps<TData extends RowData> {
-	getValue: Getter<unknown>;
-	row: Row<TData>;
+	getValue?: Getter<unknown>;
+	row?: Row<TData>;
 	column: Column<TData, unknown>;
 	table: Table<TData>;
 }

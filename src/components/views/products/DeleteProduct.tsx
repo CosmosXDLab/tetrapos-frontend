@@ -3,8 +3,8 @@ import { showCosmosToast } from "@/components/cosmos/CosmosToast";
 import { TrashIcon } from "@/components/icons";
 import { AlertDialogAction, AlertDialogCancel } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { useDeleteProduct } from "@/hooks/useProducts";
 import { useModal } from "@/hooks/useModal";
+import { useDeleteProduct } from "@/hooks/useProducts";
 
 interface DeleteProductProps {
 	selectedIds: string[];
@@ -12,14 +12,14 @@ interface DeleteProductProps {
 
 const DeleteProduct: React.FC<DeleteProductProps> = ({ selectedIds }) => {
 	const { isOpen: alertOpen, onOpenChange: onAlertOpenChange } = useModal();
-	const DeleteProductMutation = useDeleteProduct();
+	const deleteProductMutation = useDeleteProduct();
 
 	const handleDeleteSelected = async () => {
 		for (const id of selectedIds) {
-			await DeleteProductMutation.mutateAsync(id);
+			await deleteProductMutation.mutateAsync(id);
 		}
 		onAlertOpenChange(false); // Cierra el diálogo después de eliminar
-		showCosmosToast({ type: "success", message: "Cliente eliminado" });
+		showCosmosToast({ type: "success", message: "Producto eliminado" });
 	};
 
 	return (
@@ -46,7 +46,7 @@ const DeleteProduct: React.FC<DeleteProductProps> = ({ selectedIds }) => {
 				</div>
 			}
 		>
-			<p>¿Desea eliminar los clientes seleccionados?</p>
+			<p>¿Desea eliminar los productos seleccionados?</p>
 		</CosmosAlertDialog>
 	);
 };

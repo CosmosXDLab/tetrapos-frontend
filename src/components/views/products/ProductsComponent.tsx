@@ -3,12 +3,12 @@ import CustomDataTable from "@/components/cosmos/CustomDataTable/CustomDataTable
 import { FilterIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { columns } from "./columns";
 import { useGetAllProducts } from "@/hooks/useProducts";
-import { useState } from "react";
 import type { Product } from "@/types/products";
+import { useState } from "react";
 import CreateProductsModal from "./CreateProducts/CreateProductsModal";
-import DeleteProduct from "./DeleteProducts";
+import DeleteProduct from "./DeleteProduct";
+import { columns } from "./columns";
 
 const ProductsView = () => {
 	const { data, isLoading } = useGetAllProducts();

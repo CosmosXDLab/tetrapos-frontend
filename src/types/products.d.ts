@@ -5,16 +5,16 @@ export interface Product {
 	id: string;
 	code: string;
 	name: string;
-	description: string;
+	description?: string;
 	kind: string;
 	classification: string;
 	product_category: ProductCategory;
 	product_family: ProductFamily;
 	measurement_unit: MeasurementUnit;
-	product_controller: ProductController;
-	product_locations: ProductLocation[];
-	barcodes: string[];
-	state: string;
+	product_controller?: ProductController;
+	product_locations?: ProductLocation[];
+	barcodes?: string[];
+	state?: string;
 }
 
 interface ProductCategory {

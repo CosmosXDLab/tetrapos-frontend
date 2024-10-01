@@ -1,7 +1,7 @@
 import { EndPoints } from "@/api/config/endpoints";
 import { apiRequest } from "@/api/services/apiRequest";
 import type { EndPointsValues } from "@/types";
-import type { Product } from "@/types/products";
+import type { CreateProduct, Product } from "@/types/products";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function useGetAllProducts() {
@@ -29,8 +29,8 @@ export function useCreateProduct() {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: async (data: Product) => {
-			const response = await apiRequest<Product>("post", EndPoints.products, data);
+		mutationFn: async (data: CreateProduct) => {
+			const response = await apiRequest<CreateProduct>("post", EndPoints.products, data);
 			return response.data;
 		},
 		onSuccess: () => {

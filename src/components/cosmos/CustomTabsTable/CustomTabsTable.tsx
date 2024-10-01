@@ -1,109 +1,122 @@
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { type ColumnMeta, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { useEffect, useRef, useState } from "react";
+import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { useCallback, useEffect, useRef, useState } from "react";
+import EditableCell from "./EditableCell";
 import type { TabsTableProps } from "./types";
 
-const CustomTabsTable = <TData, TValue>({ columns, data }: TabsTableProps<TData, TValue>) => {
-	const [selectedRowIndex, setSelectedRowIndex] = useState<number | null>(null);
-	const [newRowData, setNewRowData] = useState<Record<string, unknown>>({});
+const CustomTabsTable = <TData, TValue>({ columns, data: initialData }: TabsTableProps<TData, TValue>) => {
+	const [state, setState] = useState({
+		editData: initialData,
+		selectedRowIndex: null as number | null,
+		editingRowIndex: null as number | null,
+		newRowData: {} as Record<string, TValue>,
+		resetNewRow: false,
+	});
+
 	const tableRef = useRef<HTMLDivElement>(null);
 	let clickTimeout: NodeJS.Timeout | null = null;
 
 	const table = useReactTable({
-		data,
+		data: state.editData,
 		columns,
 		getCoreRowModel: getCoreRowModel(),
 		meta: {
-			updateData: (rowIndex: number, columnId: string, value: unknown) => {
-				console.log("updateData", rowIndex, columnId, value);
-			},
+			updateData: useCallback((rowIndex: number, columnId: string, value: unknown) => {
+				setState((prevState) => ({
+					...prevState,
+					editData: prevState.editData.map((row, index) => (index === rowIndex ? { ...row, [columnId]: value } : row)),
+				}));
+			}, []),
+			updateNewRowData: useCallback((columnId: string, value: unknown) => {
+				setState((prevState) => ({
+					...prevState,
+					newRowData: { ...prevState.newRowData, [columnId]: value as TValue },
+				}));
+			}, []),
+			resetNewRow: state.resetNewRow,
 		},
 	});
 
-	const handleRowClick = (rowIndex: number) => {
-		const rowData = table.getRowModel().rows[rowIndex].original;
-		console.log("Single click: ", rowData);
-		setSelectedRowIndex(rowIndex);
-	};
-
-	const handleRowDoubleClick = (rowIndex: number) => {
-		const rowData = table.getRowModel().rows[rowIndex].original;
-		console.log("Double click: ", rowData);
-	};
-
-	const handleRowClickHandler = (rowIndex: number) => {
-		if (clickTimeout) clearTimeout(clickTimeout);
-		clickTimeout = setTimeout(() => {
-			handleRowClick(rowIndex);
-			clickTimeout = null;
-		}, 200);
-	};
-
-	const handleRowDoubleClickHandler = (rowIndex: number) => {
-		if (clickTimeout) clearTimeout(clickTimeout);
-		handleRowDoubleClick(rowIndex);
-	};
-
-	const handleClickOutside = (event: MouseEvent) => {
-		if (tableRef.current && !tableRef.current.contains(event.target as Node)) {
-			setSelectedRowIndex(null);
+	// Agregar la nueva fila si todos los valores están completos
+	const handleAddRow = useCallback(() => {
+		const isRowComplete = Object.values(state.newRowData).every((value) => value !== undefined && value !== "");
+		if (isRowComplete) {
+			setState((prevState) => ({
+				...prevState,
+				editData: [...prevState.editData, prevState.newRowData as TData],
+				newRowData: {},
+				resetNewRow: true,
+			}));
+		} else {
+			console.log("Complete all fields before adding the row");
 		}
-	};
+	}, [state.newRowData]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	// Maneja la detección de teclas (Enter o Insert)
+	const handleKeyPress = useCallback(
+		(event: KeyboardEvent) => {
+			if (event.key === "Enter" || event.key === "Insert") {
+				handleAddRow();
+			}
+		},
+		[handleAddRow],
+	);
+
+	// Obtenemos el index de la fila seleccionada
+	const handleRowClick = useCallback(
+		(rowIndex: number) => {
+			console.log("Single click: ", table.getRowModel().rows[rowIndex].original);
+			setState((prevState) => ({ ...prevState, selectedRowIndex: rowIndex }));
+		},
+		[table],
+	);
+
+	const handleRowDoubleClick = useCallback(
+		(rowIndex: number) => {
+			console.log("Double click: ", table.getRowModel().rows[rowIndex].original);
+			setState((prevState) => ({ ...prevState, editingRowIndex: rowIndex }));
+		},
+		[table],
+	);
+
+	const handleRowClickHandler = useCallback(
+		(rowIndex: number) => {
+			if (clickTimeout) clearTimeout(clickTimeout);
+			clickTimeout = setTimeout(() => {
+				handleRowClick(rowIndex);
+				clickTimeout = null;
+			}, 200);
+		},
+		[handleRowClick],
+	);
+
+	const handleRowDoubleClickHandler = useCallback(
+		(rowIndex: number) => {
+			if (clickTimeout) clearTimeout(clickTimeout);
+			handleRowDoubleClick(rowIndex);
+		},
+		[handleRowDoubleClick],
+	);
+
 	useEffect(() => {
-		document.addEventListener("mousedown", handleClickOutside);
+		const handleKeyPressWrapper = (e: KeyboardEvent) => handleKeyPress(e);
+		window.addEventListener("keydown", handleKeyPressWrapper);
 		return () => {
-			document.removeEventListener("mousedown", handleClickOutside);
+			window.removeEventListener("keydown", handleKeyPressWrapper);
 		};
-	}, []);
+	}, [handleKeyPress]);
 
-	const handleInputChange = (columnId: string, value: any) => {
-		setNewRowData((prev) => ({ ...prev, [columnId]: value }));
-	};
-
-	const renderInputCell = (columnId: string, meta: ColumnMeta<TData, unknown> | undefined) => {
-		const value = newRowData[columnId] || "";
-		const metaType = meta?.type || "text";
-		const metaOptions = meta?.options || [];
-
-		const commonProps = {
-			className: "w-20",
-			value: value as string,
-			onChange: (e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(columnId, e.target.value),
-		};
-
-		switch (metaType) {
-			case "text":
-			case "number":
-				return <Input {...commonProps} type={metaType} min={metaType === "number" ? 0 : undefined} />;
-			case "select":
-				return (
-					<Select onValueChange={(val) => handleInputChange(columnId, val)} value={value as string}>
-						<SelectTrigger className="w-20">
-							<SelectValue placeholder="Select" />
-						</SelectTrigger>
-						<SelectContent>
-							{metaOptions.map((option) => (
-								<SelectItem key={option.value} value={option.value}>
-									{option.label}
-								</SelectItem>
-							))}
-						</SelectContent>
-					</Select>
-				);
-			case "checkbox":
-				return (
-					<Checkbox checked={Boolean(value)} onCheckedChange={(checked) => handleInputChange(columnId, checked)} />
-				);
-			default:
-				return null;
+	useEffect(() => {
+		if (state.resetNewRow) {
+			setState((prevState) => ({ ...prevState, resetNewRow: false }));
 		}
-	};
+	}, [state.resetNewRow]);
+
+	// Seteamos la data inicial en la tabla
+	useEffect(() => {
+		setState((prevState) => ({ ...prevState, editData: initialData }));
+	}, [initialData]);
 
 	return (
 		<ScrollArea
@@ -129,7 +142,7 @@ const CustomTabsTable = <TData, TValue>({ columns, data }: TabsTableProps<TData,
 							onClick={() => handleRowClickHandler(rowIndex)}
 							onDoubleClick={() => handleRowDoubleClickHandler(rowIndex)}
 							className={`bg-white text-cosmos-texto hover:bg-cosmos-table-seleccion cursor-pointer ${
-								selectedRowIndex === rowIndex ? "bg-cosmos-table-seleccion" : ""
+								state.selectedRowIndex === rowIndex ? "bg-cosmos-table-seleccion" : ""
 							}`}
 						>
 							{row.getVisibleCells().map((cell) => (
@@ -138,7 +151,11 @@ const CustomTabsTable = <TData, TValue>({ columns, data }: TabsTableProps<TData,
 									className="p-5"
 									style={{ textAlign: cell.column.columnDef.meta?.type === "checkbox" ? "center" : "left" }}
 								>
-									{flexRender(cell.column.columnDef.cell, cell.getContext())}
+									{state.editingRowIndex === rowIndex ? (
+										<EditableCell getValue={cell.getValue} table={table} column={cell.column} row={row} />
+									) : (
+										flexRender(cell.column.columnDef.cell, cell.getContext())
+									)}
 								</TableCell>
 							))}
 						</TableRow>
@@ -150,7 +167,7 @@ const CustomTabsTable = <TData, TValue>({ columns, data }: TabsTableProps<TData,
 								className="p-5"
 								style={{ textAlign: header.column.columnDef.meta?.type === "checkbox" ? "center" : "left" }}
 							>
-								{renderInputCell(header.id, header.column.columnDef.meta)}
+								<EditableCell table={table} column={header.column} />
 							</TableCell>
 						))}
 					</TableRow>

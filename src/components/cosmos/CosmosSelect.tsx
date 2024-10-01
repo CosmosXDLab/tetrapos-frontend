@@ -18,7 +18,8 @@ interface BaseSelectProps {
 	options?: SelectOptions[];
 	icon?: React.ReactNode;
 	disabled?: boolean;
-	defaultValue?: string;
+	value?: string; // Agrega el valor actual
+	defaultValue?: string; // Para valores por defecto
 	onValueChange?: (value: string) => void;
 }
 
@@ -35,6 +36,7 @@ const CosmosSelect = React.forwardRef<HTMLDivElement, SelectProps>(
 		options,
 		icon,
 		disabled = false,
+		value, // Recibimos value aquí
 		defaultValue,
 		onValueChange,
 		...props
@@ -53,7 +55,13 @@ const CosmosSelect = React.forwardRef<HTMLDivElement, SelectProps>(
 					</Label>
 				)}
 
-				<Select onValueChange={handleValueChange} disabled={disabled} {...props}>
+				<Select
+					onValueChange={handleValueChange}
+					value={value} // Usamos el valor controlado aquí
+					defaultValue={defaultValue}
+					disabled={disabled}
+					{...props}
+				>
 					<SelectTrigger icon={icon || <ChevronDownIcon />} className={disabled ? "cursor-not-allowed opacity-50" : ""}>
 						<SelectValue placeholder={placeholder} />
 					</SelectTrigger>
