@@ -13,6 +13,7 @@ interface CosmosCalendarProps {
 	required?: boolean;
 	selected?: string; // Cambiado a string para toISOString
 	onSelect?: (date: string | undefined) => void; // Cambiado a string para toISOString
+	disabled?: boolean
 }
 
 const CosmosCalendar = ({
@@ -22,7 +23,8 @@ const CosmosCalendar = ({
 	placeholder,
 	required,
 	selected,
-	onSelect
+	onSelect,
+	disabled
 }: CosmosCalendarProps) => {
 	const handleSelect = (date: Date | undefined) => {
 		if (date) {
@@ -57,7 +59,7 @@ const CosmosCalendar = ({
 					selected={selected ? new Date(selected) : undefined}
 					onSelect={handleSelect}
 					disabled={(date) =>
-						date > new Date() || date < new Date("1900-01-01")
+						date > new Date() || date < new Date("1900-01-01") || !!disabled
 					}
 					initialFocus
 				/>

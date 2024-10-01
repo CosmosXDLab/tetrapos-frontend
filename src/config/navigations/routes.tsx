@@ -44,7 +44,7 @@ const routesNavigators: RoutesNavigators[] = [
 	{
 		name: "Diario de Caja",
 		icon: LockClockIcon,
-		path: "/cash-register",
+		path: "/cash-journals",
 	},
 	{
 		name: "Configuración",
