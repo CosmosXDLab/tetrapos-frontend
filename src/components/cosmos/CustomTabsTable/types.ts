@@ -4,6 +4,7 @@ declare module "@tanstack/react-table" {
 	interface TableMeta<TData extends RowData> {
 		updateData: (rowIndex: number, columnId: string, value: unknown) => void;
 		updateNewRowData: (columnId: string, value: unknown) => void;
+		resetNewRow: boolean;
 	}
 
 	interface ColumnMeta<TData extends RowData, TValue> {
