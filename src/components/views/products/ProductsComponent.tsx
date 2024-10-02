@@ -1,15 +1,18 @@
 import { CosmosInput } from "@/components/cosmos/CosmosInput";
 import CustomDataTable from "@/components/cosmos/CustomDataTable/CustomDataTable";
-import { FilterIcon, TrashIcon, PlusIcon } from "@/components/icons";
+import { FilterIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { columns } from "./columns";
-import { useState } from "react";
 import { useGetAllProducts } from "@/hooks/useProducts";
+import type { Product } from "@/types/products";
+import { useState } from "react";
+import CreateProductsModal from "./CreateProducts/CreateProductsModal";
+import DeleteProduct from "./DeleteProduct";
+import { columns } from "./columns";
 
-const ProductosComponent = () => {
-	const { data } = useGetAllProducts();
-    const [selectedRowsData, setSelectedRowsData] = useState<Record<string, any>>({});
+const ProductsView = () => {
+	const { data, isLoading } = useGetAllProducts();
+	const [selectedRowsData, setSelectedRowsData] = useState<Record<string, Product>>({});
 	const selectedIds = Object.values(selectedRowsData).map((row) => row.id);
 
 	return (
@@ -17,13 +20,8 @@ const ProductosComponent = () => {
 			<div className="flex justify-between w-full">
 				<h1 className="text-3xl font-semibold text-cosmos-texto">Productos</h1>
 				<div className="flex gap-2">
-          <Button variant="icon" size="icon">
-            <PlusIcon className="fill-current" />
-          </Button>
-
-					<Button variant={"icon"} size={"icon"}>
-						<TrashIcon className="fill-current" />
-					</Button>
+					<CreateProductsModal />
+					<DeleteProduct selectedIds={selectedIds} />
 				</div>
 			</div>
 			<div className="flex items-center gap-2">
@@ -40,10 +38,15 @@ const ProductosComponent = () => {
 				</Button>
 			</div>
 			<ScrollArea className="w-full h-[450px]">
-				<CustomDataTable columns={columns} data={data || []} onRowSelectionChange={setSelectedRowsData} />
+				<CustomDataTable
+					columns={columns}
+					data={data || []}
+					onRowSelectionChange={setSelectedRowsData}
+					loading={isLoading}
+				/>
 			</ScrollArea>
 		</div>
 	);
 };
 
-export default ProductosComponent;
+export default ProductsView;

@@ -54,6 +54,7 @@ const DialogContent = React.forwardRef<React.ElementRef<typeof DialogPrimitive.C
 		</DialogPortal>
 	),
 );
+
 DialogContent.displayName = DialogPrimitive.Content.displayName;
 
 const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
