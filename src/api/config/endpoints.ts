@@ -3,7 +3,7 @@ export enum ApiRoutes {
 	SALES_INVOICES = "sales/invoices",
 	PRODUCTS = "products",
 	GUIDES = "guides",
-	WAREHOUSES = "warehouses",
+	WAREHOUSES = "products/warehouses",
 	CASH_JOURNALS = "sales/cash-journals",
 	// Añadir más rutas según se necesiten
 }

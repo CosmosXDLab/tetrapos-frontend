@@ -1,8 +1,11 @@
+import { CreateWarehouseSchema } from "@/schemas/warehouses/createWarehousesSchema";
+import type { z } from "zod";
+
 export interface Warehouse {
     id: string;
-    nombre: string;
-    ubicacion: string;
-    capacidad: number;
-    responsable: string;
-    estado: string;
+    code: string;
+    name: string;
+    description: string;
 }
+
+export type CreateWarehouse = z.infer<typeof CreateWarehouseSchema>;

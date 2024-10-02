@@ -1,17 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
+import { Warehouse } from "@/types/warehouses";
 import type { ColumnDef } from "@tanstack/react-table";
 
-export const columns: ColumnDef<any>[] = [
+export const columns: ColumnDef<Warehouse>[] = [
 	{
 		id: "select",
 		header: ({ table }) => (
 			<Checkbox
-				checked={
-					table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")
-				}
-				onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+				checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
+				onCheckedChange={(value) => {
+					table.toggleAllPageRowsSelected(!!value);
+				}}
 				aria-label="Seleccionar todos"
 			/>
 		),
@@ -19,7 +20,9 @@ export const columns: ColumnDef<any>[] = [
 			<Checkbox
 				className={cn(row.getIsSelected() ? "border-none" : "")}
 				checked={row.getIsSelected()}
-				onCheckedChange={(value) => row.toggleSelected(!!value)}
+				onCheckedChange={(value) => {
+					row.toggleSelected(!!value);
+				}}
 				aria-label="Seleccionar fila"
 			/>
 		),
@@ -27,38 +30,17 @@ export const columns: ColumnDef<any>[] = [
 		enableHiding: false,
 	},
     {
-        accessorKey: "nombre",
+        accessorKey: "code",
+        header: "Código",
+    },
+    {
+        accessorKey: "name",
         header: "Nombre",
     },
     {
-        accessorKey: "ubicacion",
-        header: "Ubicación",
+        accessorKey: "description",
+        header: "Descripción",
     },
-    {
-        accessorKey: "capacidad",
-        header: "Capacidad",
-    },
-    {
-        accessorKey: "responsable",
-        header: "Responsable",
-    },
-	{
-		accessorKey: "estado",
-		header: "Estado",
-		cell: ({ row }) => {
-			return (
-				<span
-					className={cn(
-						row.original.estado === "Activo" && "bg-label text-white",
-						row.original.estado === "Inactivo" && "bg-input-background text-texto",
-						"py-2 px-3 text-xs rounded-full",
-					)}
-				>
-					{row.original.estado}
-				</span>
-			);
-		},
-	},
 	{
 		accessorKey: "actions",
 		header: "",
