@@ -1,28 +1,28 @@
 import { CosmosInput } from "@/components/cosmos/CosmosInput";
+import CosmosModal from "@/components/cosmos/CosmosModal";
 import CustomDataTable from "@/components/cosmos/CustomDataTable/CustomDataTable";
 import { FilterIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useGetAllCustomers } from "@/hooks/useCustomer";
+import { JsonToCsv } from "@/lib/jsonToCsv";
 import type { Customer } from "@/types";
 import { useState } from "react";
 import CreateCustomerModal from "./CreateCustomerModal";
-import { columns } from "./columns";
-import { useGetAllCustomers } from "@/hooks/useCustomer";
 import DeleteCustomer from "./DeleteCustomer";
-import { JsonToCsv } from "@/lib/jsonToCsv";
-import CosmosModal from "@/components/cosmos/CosmosModal";
+import { columns } from "./columns";
 
 const CustomerView = () => {
-	const { data } = useGetAllCustomers();
+	const { data, isLoading } = useGetAllCustomers();
 	const [selectedRowsData, setSelectedRowsData] = useState<Record<string, Customer>>({});
 	const [showConfirmDownload, setShowConfirmDownload] = useState<boolean>(false);
 	const selectedIds = Object.values(selectedRowsData).map((row) => row.id);
 
 	const exportData = () => {
 		if (!data || data?.length === 0) return;
-		JsonToCsv.exec(data, `customers-${Date.now().toString()}`); 
-		setShowConfirmDownload(false)
-	}
+		JsonToCsv.exec(data, `customers-${Date.now().toString()}`);
+		setShowConfirmDownload(false);
+	};
 
 	return (
 		<div className="flex flex-col w-full h-full gap-5 px-12 py-12">
@@ -45,14 +45,16 @@ const CustomerView = () => {
 				<Button variant={"icon"} size={"icon"} onClick={() => setShowConfirmDownload(true)}>
 					<FilterIcon className="fill-current" />
 				</Button>
-				<CosmosModal 
+				<CosmosModal
 					children={<p className="text-sm">¿Deseas generar este reporte?</p>}
 					onOpenChange={() => setShowConfirmDownload(!showConfirmDownload)}
 					open={showConfirmDownload}
 					title="Confirmar"
 					footer={
 						<div className="flex justify-end gap-2">
-							<Button variant="decline" onClick={() => setShowConfirmDownload(false)}>No</Button>
+							<Button variant="decline" onClick={() => setShowConfirmDownload(false)}>
+								No
+							</Button>
 							<Button variant="accept" onClick={() => exportData()}>
 								Si
 							</Button>
@@ -61,7 +63,12 @@ const CustomerView = () => {
 				/>
 			</div>
 			<ScrollArea className="w-full h-[450px]">
-				<CustomDataTable columns={columns} data={data || []} onRowSelectionChange={setSelectedRowsData} />
+				<CustomDataTable
+					columns={columns}
+					data={data || []}
+					onRowSelectionChange={setSelectedRowsData}
+					loading={isLoading}
+				/>
 			</ScrollArea>
 		</div>
 	);

@@ -1,4 +1,5 @@
 import { CreateWarehouseSchema } from "@/schemas/warehouses/createWarehousesSchema";
+import { UpdateWarehouseSchema } from "@/schemas/warehouses/updateWarehousesSchema";
 import type { z } from "zod";
 
 export interface Warehouse {
@@ -9,3 +10,5 @@ export interface Warehouse {
 }
 
 export type CreateWarehouse = z.infer<typeof CreateWarehouseSchema>;
+
+export type UpdateWarehouse = z.infer<typeof UpdateWarehouseSchema>;

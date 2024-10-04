@@ -1,17 +1,21 @@
+import ClosedEyeIcon from "@/components/icons/ClosedEyeIcon";
+import PencilIcon from "@/components/icons/PencilIcon";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { cn } from "@/lib/utils";
+import type { Product } from "@/types/products";
+import { cn } from "@/utils/tailwindCN";
 import type { ColumnDef } from "@tanstack/react-table";
+import { useState } from "react";
 
-export const columns: ColumnDef<any>[] = [
+export const columns: ColumnDef<Product>[] = [
 	{
 		id: "select",
 		header: ({ table }) => (
 			<Checkbox
-				checked={
-					table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")
-				}
-				onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+				checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
+				onCheckedChange={(value) => {
+					table.toggleAllPageRowsSelected(!!value);
+				}}
 				aria-label="Seleccionar todos"
 			/>
 		),
@@ -19,7 +23,9 @@ export const columns: ColumnDef<any>[] = [
 			<Checkbox
 				className={cn(row.getIsSelected() ? "border-none" : "")}
 				checked={row.getIsSelected()}
-				onCheckedChange={(value) => row.toggleSelected(!!value)}
+				onCheckedChange={(value) => {
+					row.toggleSelected(!!value);
+				}}
 				aria-label="Seleccionar fila"
 			/>
 		),
@@ -27,58 +33,70 @@ export const columns: ColumnDef<any>[] = [
 		enableHiding: false,
 	},
 	{
-		accessorKey: "codigo",
+		accessorKey: "code",
 		header: "Código",
 	},
 	{
-		accessorKey: "nombre",
+		accessorKey: "name",
 		header: "Nombre",
 	},
 	{
-		accessorKey: "tipo_producto",
-		header: "Tipo de Producto",
+		accessorKey: "kind",
+		header: "Tipo de producto",
 	},
 	{
-		accessorKey: "clasificacion",
+		accessorKey: "classification",
 		header: "Clasificación",
 	},
 	{
-		accessorKey: "categoria",
+		accessorKey: "product_category",
 		header: "Categoría",
+		cell: ({ row }) => {
+			return <div>{row.original.product_category.name}</div>;
+		},
 	},
 	{
-		accessorKey: "familia",
+		accessorKey: "product_family",
 		header: "Familia",
+		cell: ({ row }) => {
+			return <div>{row.original.product_family.name}</div>;
+		},
 	},
 	{
-		accessorKey: "estado",
+		accessorKey: "state",
 		header: "Estado",
 		cell: ({ row }) => {
 			return (
-				<span
-					className={cn(
-						row.original.estado === "Activo" && "bg-label text-white",
-						row.original.estado === "Inactivo" && "bg-input-background text-texto",
-						"py-2 px-3 text-xs rounded-full",
-					)}
-				>
-					{row.original.estado}
-				</span>
+				<div className="bg-cosmos-label rounded-full text-white px-2 py-1.5 text-center w-20">{row.original.state}</div>
 			);
 		},
 	},
 	{
 		accessorKey: "actions",
 		header: "",
-		cell: () => {
+		cell: ({ row }) => {
+			const [isModalOpen, setIsModalOpen] = useState(false);
+
+			const handleOpenModal = () => {
+				setIsModalOpen(true);
+			};
+
+			const handleCloseModal = () => {
+				setIsModalOpen(false);
+			};
+
 			return (
 				<div className="flex gap-2">
-					<Button variant={"outline"} size={"icon"} className="border-2 border-label">
-						eye
+					<Button variant={"icon"} size={"icon"} onClick={() => console.log(row.original.id)}>
+						<ClosedEyeIcon className="fill-current" />
 					</Button>
-					<Button variant={"outline"} size={"icon"} className="border-2 border-label">
-						pen
+					<Button variant={"icon"} size={"icon"} onClick={handleOpenModal}>
+						<PencilIcon className="fill-current" />
 					</Button>
+
+					{/* {isModalOpen && (
+						<UpdateCustomerModal customerID={row.original.id} isOpen={isModalOpen} onClose={handleCloseModal} />
+					)} */}
 				</div>
 			);
 		},

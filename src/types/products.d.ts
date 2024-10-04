@@ -1,17 +1,20 @@
+import type { CreateProductSchema } from "@/schemas/products/createProductSchema";
+import type { z } from "zod";
+
 export interface Product {
 	id: string;
 	code: string;
 	name: string;
-	description: string;
+	description?: string;
 	kind: string;
 	classification: string;
 	product_category: ProductCategory;
 	product_family: ProductFamily;
 	measurement_unit: MeasurementUnit;
-	product_controller: ProductController;
-	product_locations: ProductLocation[];
-	barcodes: string[];
-	state: string;
+	product_controller?: ProductController;
+	product_locations?: ProductLocation[];
+	barcodes?: string[];
+	state?: string;
 }
 
 interface ProductCategory {
@@ -60,3 +63,5 @@ interface ProductStock {
 	total_stock: number;
 	consumed_stock: number;
 }
+
+export type CreateProduct = z.infer<typeof CreateProductSchema>;

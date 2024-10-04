@@ -1,8 +1,12 @@
 import { Button } from "@/components/ui/button";
+import ClosedEyeIcon from "@/components/icons/ClosedEyeIcon";
+import PencilIcon from "@/components/icons/PencilIcon";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { Warehouse } from "@/types/warehouses";
 import type { ColumnDef } from "@tanstack/react-table";
+import UpdateWarehousesModal from "./updateWarehousesModal";
+import { useState } from "react";
 
 export const columns: ColumnDef<Warehouse>[] = [
 	{
@@ -44,15 +48,29 @@ export const columns: ColumnDef<Warehouse>[] = [
 	{
 		accessorKey: "actions",
 		header: "",
-		cell: () => {
+		cell: ({row}) => {
+			const [isModalOpen, setIsModalOpen] = useState(false);
+
+			const handleOpenModal = () => {
+				setIsModalOpen(true);
+			};
+
+			const handleCloseModal = () => {
+				setIsModalOpen(false);
+			};
+
 			return (
 				<div className="flex gap-2">
-					<Button variant={"outline"} size={"icon"} className="border-2 border-label">
-						eye
+					<Button variant={"icon"} size={"icon"} onClick={() => console.log(row.original.name)}>
+						<ClosedEyeIcon className="fill-current" />
 					</Button>
-					<Button variant={"outline"} size={"icon"} className="border-2 border-label">
-						pen
+					<Button variant={"icon"} size={"icon"} onClick={handleOpenModal}>
+						<PencilIcon className="fill-current" />
 					</Button>
+
+					{isModalOpen && (
+						<UpdateWarehousesModal warehouseID={row.original.id} isOpen={isModalOpen} onClose={handleCloseModal} />
+					)}
 				</div>
 			);
 		},

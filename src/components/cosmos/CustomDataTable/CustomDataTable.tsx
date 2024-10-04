@@ -3,12 +3,17 @@ import type { DataTableProps } from "./types";
 import "./CustomDataTable.css";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useEffect, useMemo, useState } from "react";
+import CosmosLoader from "../CustomLoader/CosmosLoader";
 
 const CustomDataTable = <TData extends { id: string | number }, TValue>({
 	columns,
 	data,
 	onRowSelectionChange, // New prop to notify parent component about selection changes
-}: DataTableProps<TData, TValue> & { onRowSelectionChange: (selected: Record<string, TData>) => void }) => {
+	loading,
+}: DataTableProps<TData, TValue> & {
+	onRowSelectionChange: (selected: Record<string, TData>) => void;
+	loading: boolean;
+}) => {
 	const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
 
 	const table = useReactTable({
@@ -54,7 +59,15 @@ const CustomDataTable = <TData extends { id: string | number }, TValue>({
 				))}
 			</TableHeader>
 			<TableBody>
-				{table.getRowModel().rows?.length ? (
+				{loading ? (
+					<TableRow>
+						<TableCell colSpan={columns.length} className="h-96">
+							<div className="flex items-center justify-center">
+								<CosmosLoader />
+							</div>
+						</TableCell>
+					</TableRow>
+				) : table.getRowModel().rows?.length ? (
 					table.getRowModel().rows.map((row) => (
 						<TableRow className="table-body-row" key={row.id} data-state={row.getIsSelected() && "selected"}>
 							{row.getVisibleCells().map((cell) => (
