@@ -7,7 +7,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 export function useGetAllGuides() {
 	return useQuery<Guide[]>({
 		queryFn: async () => {
-			const response = await apiRequest<Guide[]>("get", EndPoints.guides);
+			const response = await apiRequest<Guide[]>("get", EndPoints.sales.guides);
 			return response.data;
 		},
 		queryKey: ["getAllGuides"],
@@ -17,7 +17,7 @@ export function useGetAllGuides() {
 export function useGetGuideById(id: string) {
 	return useQuery<Guide>({
 		queryFn: async () => {
-			const endpoint = `${EndPoints.guides}/${id}` as EndPointsValues;
+			const endpoint = `${EndPoints.sales.guides}/${id}` as EndPointsValues;
 			const response = await apiRequest<Guide>("get", endpoint);
 			return response.data;
 		},
@@ -30,7 +30,7 @@ export function useCreateGuide() {
 
 	return useMutation({
 		mutationFn: async (data: Guide) => {
-			const response = await apiRequest<Guide>("post", EndPoints.guides, data);
+			const response = await apiRequest<Guide>("post", EndPoints.sales.guides, data);
 			return response.data;
 		},
 		onSuccess: () => {
@@ -44,7 +44,7 @@ export function useUpdateGuide() {
 
 	return useMutation({
 		mutationFn: async ({ data, id }: { data: Guide; id: string }) => {
-			const endpoint = `${EndPoints.guides}/${id}` as EndPointsValues;
+			const endpoint = `${EndPoints.sales.guides}/${id}` as EndPointsValues;
 			const response = await apiRequest<Guide>("put", endpoint, data);
 			console.log(response.data);
 
@@ -61,7 +61,7 @@ export function useDeleteGuide() {
 
 	return useMutation({
 		mutationFn: async (id: string) => {
-			const endpoint = `${EndPoints.guides}/${id}` as EndPointsValues;
+			const endpoint = `${EndPoints.sales.guides}/${id}` as EndPointsValues;
 			const response = await apiRequest<null>("delete", endpoint);
 			return response.data;
 		},
