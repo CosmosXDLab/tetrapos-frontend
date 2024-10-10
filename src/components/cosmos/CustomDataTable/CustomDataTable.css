@@ -2,11 +2,15 @@
 
 @layer components {
     .table-container {
-        @apply table w-full space-y-6 text-sm text-gray-400 border-separate border-spacing-y-4;
+        @apply relative max-h-[400px] overflow-y-auto;
+    }
+
+    .table {
+        @apply w-full text-sm text-gray-400 border-separate border-spacing-y-0;
     }
 
     .table-head {
-        @apply px-5 font-semibold text-cosmos-texto;
+        @apply sticky top-0 z-10 bg-white px-5 font-semibold text-cosmos-texto;
     }
 
     .table-body-row {

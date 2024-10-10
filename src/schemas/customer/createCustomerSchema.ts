@@ -27,23 +27,24 @@ export const CreateCustomerSchema = z
 			.string()
 			.min(1, { message: "La región no puede estar vacía" })
 			.max(100, { message: "La región no puede exceder los 100 caracteres" }),
-		address: z.string().min(1, { message: "La dirección no puede estar vacía" }).max(100, {
-			message: "La dirección no puede exceder los 100 caracteres",
+		address: z.
+			string()
+			.min(1, { message: "La dirección no puede estar vacía" })
+			.max(100, {	message: "La dirección no puede exceder los 100 caracteres",
 		}),
-		phone_number: z.string().min(1, { message: "El número de teléfono no puede estar vacío" }).max(15, {
-			message: "El número de teléfono no puede exceder los 15 caracteres",
-		}),
+		phone_number: z
+			.string()
+			.length(9, { message: "El número de teléfono debe tener exactamente 9 caracteres." }), // Error num de Telefono
 		email: z.string().email({ message: "Formato de correo electrónico inválido" }),
 		birthday: z.string().default(new Date().toISOString()),
 	})
 	.refine(
 		(data) => {
 			if (data.identification_document_type === "DNI") {
-				return !!data.first_names && !!data.last_names && !data.business_name;
+				return data.identification_document_number.length === 8 && !!data.first_names && !!data.last_names && !data.business_name; // Error para dni
 			}
-			return !!data.business_name && !data.first_names && !data.last_names;
-		},
-		{
+			return data.identification_document_number.length === 11 && !!data.business_name && !data.first_names && !data.last_names; // Error para ruc
+		},{
 			message: "Debe proporcionar 'Nombres' y 'Apellidos' para 'DNI' o 'Razón Social' para 'RUC'",
 			path: ["business_name", "first_names", "last_names"],
 		},

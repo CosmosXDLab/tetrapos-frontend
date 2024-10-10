@@ -22,7 +22,7 @@ const SideNav = () => {
 		const allButLastIcons = routesNavigators.slice(0, -1);
 		return allButLastIcons.map(({ icon: Icon, path }) => (
 			<SideNavButton key={randomKey()} to={path}>
-				<Icon className="fill-current" width={24} />
+				<Icon className="fill-current" width={35} height={35} /> {/*Aumento de tamaño de iconos SideNav*/}
 			</SideNavButton>
 		));
 	};
@@ -31,7 +31,7 @@ const SideNav = () => {
 		const { icon: Icon, path } = routesNavigators[routesNavigators.length - 1];
 		return (
 			<SideNavButton key={randomKey()} to={path}>
-				<Icon className="fill-current" width={24} />
+				<Icon className="fill-current" width={35} height={35} /> {/*Aumento de tamaño de icono tuerca*/}
 			</SideNavButton>
 		);
 	};
