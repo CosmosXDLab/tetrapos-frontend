@@ -3,14 +3,14 @@ import CustomDataTable from "@/components/cosmos/CustomDataTable/CustomDataTable
 import { FilterIcon, TrashIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { columns } from "./columns";
-import { useState } from "react";
 import { useGetAllCashJournals } from "@/hooks/useCashJournals";
+import { useState } from "react";
 import CreateCashRegisterModal from "./CreateCashJournalsModal";
+import { columns } from "./columns";
 
 const CashJournalsComponent = () => {
-	const { data } = useGetAllCashJournals();
-    const [selectedRowsData, setSelectedRowsData] = useState<Record<string, any>>({});
+	const { data, isLoading } = useGetAllCashJournals();
+	const [selectedRowsData, setSelectedRowsData] = useState<Record<string, any>>({});
 	const selectedIds = Object.values(selectedRowsData).map((row) => row.id);
 
 	return (
@@ -18,7 +18,7 @@ const CashJournalsComponent = () => {
 			<div className="flex justify-between w-full">
 				<h1 className="text-3xl font-semibold text-cosmos-texto">Diario de Caja</h1>
 				<div className="flex gap-2">
-                    <CreateCashRegisterModal />
+					<CreateCashRegisterModal />
 
 					<Button variant={"icon"} size={"icon"}>
 						<TrashIcon className="fill-current" />
@@ -39,7 +39,12 @@ const CashJournalsComponent = () => {
 				</Button>
 			</div>
 			<ScrollArea className="w-full h-[450px]">
-				<CustomDataTable columns={columns} data={data || []} onRowSelectionChange={setSelectedRowsData} />
+				<CustomDataTable
+					columns={columns}
+					data={data || []}
+					onRowSelectionChange={setSelectedRowsData}
+					loading={isLoading}
+				/>
 			</ScrollArea>
 		</div>
 	);
