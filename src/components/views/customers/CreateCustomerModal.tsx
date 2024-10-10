@@ -61,7 +61,6 @@ const CreateCustomerModal = () => {
 	const { resetField } = form; // (1) Desestructurar resetField para usarlo más abajo
 
 	const onSubmit = async (values: CreateCustomer) => {
-		setIsSubmitting(true); // Cambio b
 		try {
 			await mutateCreateCustomer(values);
 			onAlertOpenChange(false);
@@ -75,7 +74,6 @@ const CreateCustomerModal = () => {
 			onAlertOpenChange(false);
 			setModalError((error as Error).message);
 		}
-		setIsSubmitting(false); // Cambio c
 	};
 
 	const onError = (errors: FieldErrors) => {
@@ -83,7 +81,6 @@ const CreateCustomerModal = () => {
 
 		onAlertOpenChange(false);
 		setModalError("Por favor, revisa los campos del formulario.");
-		setIsSubmitting(false); // Cambio d
 	};
 
 	return (
