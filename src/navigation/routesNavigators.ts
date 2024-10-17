@@ -49,16 +49,6 @@ const routesNavigators: RoutesNavigators[] = [
 		path: "/cash-journals",
 	},
 	{
-		name: "Guias",
-		icon: DashboardIcon,
-		path: "/guides",
-	},
-	{
-		name: "Almacenes",
-		icon: DashboardIcon,
-		path: "/warehouses",
-	},
-	{
 		name: "Configuración",
 		icon: SettingsIcon,
 		path: "/settings",

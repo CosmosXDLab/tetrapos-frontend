@@ -1,36 +1,34 @@
 import { CosmosInput } from "@/components/cosmos/CosmosInput";
 import CustomDataTable from "@/components/cosmos/CustomDataTable/CustomDataTable";
-import { FilterIcon} from "@/components/icons";
+import { FilterIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Warehouse } from "@/types/warehouses";
+import { Carriers } from "@/types/carriers";
 import { useState } from "react";
-import CreateWarehouseModal from "./CreateWarehousesModal";
-import { columns } from "./columns";
-import { useGetAllWarehouses } from "@/hooks/useWarehouses";
-import DeleteWarehouses from "./DeleteWarehouses";
+import CreateCarrierModal from "./CreateCarriersModal"; 
+import { columns } from "./columns"; 
+import { useGetAllCarriers } from "@/hooks/useCarriers"; 
 import { JsonToCsv } from "@/lib/jsonToCsv";
 import CosmosModal from "@/components/cosmos/CosmosModal";
 
-const WarehousesView = () => {
-	const { data } = useGetAllWarehouses();
-    const [selectedRowsData, setSelectedRowsData] = useState<Record<string, Warehouse>>({});
+const CarriersView = () => {
+	const { data } = useGetAllCarriers(); // Obtener datos de carriers
+    const [selectedRowsData, setSelectedRowsData] = useState<Record<string, Carriers>>({});
 	const [showConfirmDownload, setShowConfirmDownload] = useState<boolean>(false);
 	const selectedIds = Object.values(selectedRowsData).map((row) => row.id);
 
 	const exportData = () => {
 		if (!data || data?.length === 0) return;
-		JsonToCsv.exec(data, `warehouses-${Date.now().toString()}`); 
-		setShowConfirmDownload(false)
-	}
+		JsonToCsv.exec(data, `carriers-${Date.now().toString()}`);
+		setShowConfirmDownload(false);
+	};
 
 	return (
 		<div className="flex flex-col w-full h-full gap-5 px-12 py-12">
 			<div className="flex justify-between w-full">
-				<h1 className="text-3xl font-semibold text-cosmos-texto">Almacenes</h1>
+				<h1 className="text-3xl font-semibold text-cosmos-texto">Transportistas</h1>
 				<div className="flex gap-2">
-					<CreateWarehouseModal />
-					<DeleteWarehouses selectedIds={selectedIds} />
+					{/* <CreateCarrierModal /> */}
 				</div>
 			</div>
 			<div className="flex items-center gap-2">
@@ -54,7 +52,7 @@ const WarehousesView = () => {
 						<div className="flex justify-end gap-2">
 							<Button variant="decline" onClick={() => setShowConfirmDownload(false)}>No</Button>
 							<Button variant="accept" onClick={() => exportData()}>
-								Si
+								Sí
 							</Button>
 						</div>
 					}
@@ -67,4 +65,4 @@ const WarehousesView = () => {
 	);
 };
 
-export default WarehousesView;
+export default CarriersView;

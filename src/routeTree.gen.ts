@@ -24,6 +24,7 @@ const GuidesLazyImport = createFileRoute('/guides')()
 const DashboardLazyImport = createFileRoute('/dashboard')()
 const CustomersLazyImport = createFileRoute('/customers')()
 const CashJournalsLazyImport = createFileRoute('/cash-journals')()
+const CarriersLazyImport = createFileRoute('/carriers')()
 const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
@@ -68,6 +69,11 @@ const CashJournalsLazyRoute = CashJournalsLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/cash-journals.lazy').then((d) => d.Route))
 
+const CarriersLazyRoute = CarriersLazyImport.update({
+  path: '/carriers',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/carriers.lazy').then((d) => d.Route))
+
 const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
@@ -82,6 +88,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/carriers': {
+      id: '/carriers'
+      path: '/carriers'
+      fullPath: '/carriers'
+      preLoaderRoute: typeof CarriersLazyImport
       parentRoute: typeof rootRoute
     }
     '/cash-journals': {
@@ -147,6 +160,7 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
+  '/carriers': typeof CarriersLazyRoute
   '/cash-journals': typeof CashJournalsLazyRoute
   '/customers': typeof CustomersLazyRoute
   '/dashboard': typeof DashboardLazyRoute
@@ -159,6 +173,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
+  '/carriers': typeof CarriersLazyRoute
   '/cash-journals': typeof CashJournalsLazyRoute
   '/customers': typeof CustomersLazyRoute
   '/dashboard': typeof DashboardLazyRoute
@@ -172,6 +187,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
+  '/carriers': typeof CarriersLazyRoute
   '/cash-journals': typeof CashJournalsLazyRoute
   '/customers': typeof CustomersLazyRoute
   '/dashboard': typeof DashboardLazyRoute
@@ -186,6 +202,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/carriers'
     | '/cash-journals'
     | '/customers'
     | '/dashboard'
@@ -197,6 +214,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/carriers'
     | '/cash-journals'
     | '/customers'
     | '/dashboard'
@@ -208,6 +226,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/carriers'
     | '/cash-journals'
     | '/customers'
     | '/dashboard'
@@ -221,6 +240,7 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
+  CarriersLazyRoute: typeof CarriersLazyRoute
   CashJournalsLazyRoute: typeof CashJournalsLazyRoute
   CustomersLazyRoute: typeof CustomersLazyRoute
   DashboardLazyRoute: typeof DashboardLazyRoute
@@ -233,6 +253,7 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
+  CarriersLazyRoute: CarriersLazyRoute,
   CashJournalsLazyRoute: CashJournalsLazyRoute,
   CustomersLazyRoute: CustomersLazyRoute,
   DashboardLazyRoute: DashboardLazyRoute,
@@ -256,6 +277,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/carriers",
         "/cash-journals",
         "/customers",
         "/dashboard",
@@ -268,6 +290,9 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.lazy.tsx"
+    },
+    "/carriers": {
+      "filePath": "carriers.lazy.tsx"
     },
     "/cash-journals": {
       "filePath": "cash-journals.lazy.tsx"

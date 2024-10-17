@@ -7,35 +7,38 @@ import { AlertDialogAction, AlertDialogCancel } from "@/components/ui/alert-dial
 import { Button } from "@/components/ui/button";
 import { DialogClose } from "@/components/ui/dialog";
 import { Form, FormField } from "@/components/ui/form";
-import { useCreateWarehouse } from "@/hooks/useWarehouses";
+import { useCreateCarrier } from "@/hooks/useCarriers";
 import { useModal } from "@/hooks/useModal";
-import { CreateWarehouseSchema } from "@/schemas/warehouses/createWarehousesSchema"; 
+import { CreateCarrierSchema } from "@/schemas/carriers/createCarriersSchema"; 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type FieldErrors, useForm } from "react-hook-form";
-import { CreateWarehouse } from "@/types/warehouses";
+import { useForm, type FieldErrors } from "react-hook-form";
+// import { CreateCarrier } from "@/types/carriers";
 
-const CreateWarehouseModal = () => {
+const CreateCarrierModal = () => {
     const { isOpen: modalOpen, error, onOpenChange: onModalOpenChange, setModalError } = useModal();
     const { isOpen: alertOpen, onOpenChange: onAlertOpenChange } = useModal();
-    const { mutateAsync: mutateCreateWarehouse } = useCreateWarehouse();
+    const { mutateAsync: mutateCreateCarrier } = useCreateCarrier();
 
-    const form = useForm<CreateWarehouse>({
-        resolver: zodResolver(CreateWarehouseSchema),
+    const form = useForm<CreateCarrier>({
+        resolver: zodResolver(CreateCarrierSchema),
         defaultValues: {
-            code: "",
-            name: "",
-            description: "",
+            identification_document_number: "",
+            license_number: "",
+            identification_document_type: "",
+            first_names: "",
+            business_name: "", // Fecha de emisión
+            last_names: "",    // Estado
         },
     });
 
-    const onSubmit = async (values: CreateWarehouse) => {
+    const onSubmit = async (values: CreateCarrier) => {
         try {
-            await mutateCreateWarehouse(values);
+            await mutateCreateCarrier(values);
             onAlertOpenChange(false);
             onModalOpenChange(false);
             form.reset();
             showCosmosToast({
-                message: "Almacén creado con éxito",
+                message: "Transportista creado con éxito",
                 type: "success",
             });
         } catch (error) {
@@ -53,8 +56,8 @@ const CreateWarehouseModal = () => {
     return (
         <CosmosModal
             className="w-[800px]"
-            title="Agregar Almacén"
-            titleError="Hubo un error al registrar el almacén"
+            title="Agregar Transportista"
+            titleError="Hubo un error al registrar el transportista"
             error={error}
             open={modalOpen}
             onOpenChange={onModalOpenChange}
@@ -81,13 +84,13 @@ const CreateWarehouseModal = () => {
                                 </AlertDialogCancel>
                                 <AlertDialogAction asChild>
                                     <Button variant="accept" onClick={form.handleSubmit(onSubmit, onError)}>
-                                        Si
+                                        Sí
                                     </Button>
                                 </AlertDialogAction>
                             </div>
                         }
                     >
-                        <p className="text-sm">¿Deseas agregar este nuevo almacén?</p>
+                        <p className="text-sm">¿Deseas agregar este nuevo transportista?</p>
                     </CosmosAlertDialog>
                 </div>
             }
@@ -95,30 +98,60 @@ const CreateWarehouseModal = () => {
             <Form {...form}>
                 <FormField
                     control={form.control}
-                    name="code"
+                    name="identification_document_number"
                     render={({ field }) => (
                         <div className="col-span-1">
-                            <CosmosInput showLabel required type="text" label="Código" {...field} />
+                            <CosmosInput showLabel required type="text" label="Número de documento" {...field} />
                         </div>
                     )}
                 />
                 
                 <FormField
                     control={form.control}
-                    name="name"
+                    name="license_number"
                     render={({ field }) => (
                         <div className="col-span-1">
-                            <CosmosInput showLabel required type="text" label="Nombre" {...field} />
+                            <CosmosInput showLabel required type="text" label="Número de serie" {...field} />
                         </div>
                     )}
                 />
                 
                 <FormField
                     control={form.control}
-                    name="description"
+                    name="identification_document_type"
                     render={({ field }) => (
-                        <div className="col-span-2">
-                            <CosmosInput showLabel type="text" label="Descripción" {...field} />
+                        <div className="col-span-1">
+                            <CosmosInput showLabel required type="text" label="Documento del cliente" {...field} />
+                        </div>
+                    )}
+                />
+                
+                <FormField
+                    control={form.control}
+                    name="first_names"
+                    render={({ field }) => (
+                        <div className="col-span-1">
+                            <CosmosInput showLabel required type="text" label="Nombre del cliente" {...field} />
+                        </div>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="business_name"
+                    render={({ field }) => (
+                        <div className="col-span-1">
+                            <CosmosInput showLabel required type="text" label="Fecha de emisión" {...field} />
+                        </div>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="last_names"
+                    render={({ field }) => (
+                        <div className="col-span-1">
+                            <CosmosInput showLabel required type="text" label="Estado" {...field} />
                         </div>
                     )}
                 />
@@ -127,4 +160,4 @@ const CreateWarehouseModal = () => {
     );
 };
 
-export default CreateWarehouseModal;
+export default CreateCarrierModal;

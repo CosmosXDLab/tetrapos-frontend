@@ -58,6 +58,11 @@ const routesNavigators: RoutesNavigators[] = [
 		path: "/warehouses",
 	},
 	{
+		name: "Transportistas",
+		icon: PeopleIcon,
+		path: "/carriers",
+	},
+	{
 		name: "Configuración",
 		icon: SettingsIcon,
 		path: "/settings",

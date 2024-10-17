@@ -6,10 +6,11 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { columns } from "./columns";
 import { useState } from "react";
 import { useGetAllGuides } from "@/hooks/useGuides";
+import type { Guide } from "@/types/guides";
 
 const GuidesComponent = () => {
 	const { data } = useGetAllGuides();
-    const [selectedRowsData, setSelectedRowsData] = useState<Record<string, any>>({});
+    const [selectedRowsData, setSelectedRowsData] = useState<Record<string, Guide>>({});
 	const selectedIds = Object.values(selectedRowsData).map((row) => row.id);
 
 	return (
