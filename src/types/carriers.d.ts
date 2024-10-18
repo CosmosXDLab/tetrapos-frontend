@@ -1,3 +1,6 @@
+import { CreateCarriersSchema } from "@/schemas/carriers/createCarriersSchema"; 
+import type { UpdateCarrierSchema } from "@/schemas/carriers/updateCarriersSchema";
+
 export interface Carriers{
     id: string;
     identification_document_type: string;
@@ -7,3 +10,6 @@ export interface Carriers{
     last_names: string;
     license_number: string;
 }
+export type CreateCarriers= z.infer<typeof CreateCarriersSchema>;
+
+export type UpdateCarriers = z.infer<typeof UpdateCarrierSchema>;
