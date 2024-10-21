@@ -36,10 +36,9 @@ const options = {
 
 const CreateCustomerModal = () => {
 	const { isOpen: modalOpen, error, onOpenChange: onModalOpenChange, setModalError } = useModal();
-
 	const { isOpen: alertOpen, onOpenChange: onAlertOpenChange } = useModal();
 
-	const { mutateAsync: mutateCreateCustomer } = useCreateCustomer();
+	const { mutateAsync: mutateCreateCustomer, isPending } = useCreateCustomer(); // (a) Obtener valores de estado de useCreateCustomer
 
 	const form = useForm<CreateCustomer>({
 		resolver: zodResolver(CreateCustomerSchema),
@@ -58,6 +57,8 @@ const CreateCustomerModal = () => {
 			last_names: "",
 		},
 	});
+
+	const { resetField } = form; // (1) Desestructurar resetField para usarlo más abajo
 
 	const onSubmit = async (values: CreateCustomer) => {
 		try {
@@ -86,33 +87,42 @@ const CreateCustomerModal = () => {
 		<CosmosModal
 			className="w-[800px]"
 			title="Agregar cliente"
-            titleError="Hubo un error al registrar al cliente"
+			titleError="Hubo un error al registrar al cliente"
 			error={error}
 			open={modalOpen}
 			onOpenChange={onModalOpenChange}
 			trigger={
-				<Button variant="icon" size="icon">
+				// (a)  Deshabilitar botón si isPending o alertOpen están activos
+				<Button variant="icon" size="icon" disabled={alertOpen || isPending}>
 					<PlusIcon className="fill-current" />
 				</Button>
 			}
 			footer={
 				<div className="flex justify-end gap-2">
 					<DialogClose asChild>
-						<Button variant="decline">Cancelar</Button>
+						<Button variant="decline" disabled={isPending}>
+							Cancelar
+						</Button>
 					</DialogClose>
 					<CosmosAlertDialog
 						open={alertOpen}
 						onOpenChange={onAlertOpenChange}
 						className="w-[500px] h-auto"
 						title="Confirmación"
-						trigger={<Button variant="accept">Guardar</Button>}
+						trigger={
+							<Button variant="accept" disabled={alertOpen || isPending}>
+								Guardar
+							</Button>
+						}
 						footer={
 							<div className="flex justify-end gap-2">
 								<AlertDialogCancel asChild>
-									<Button variant="decline">No</Button>
+									<Button variant="decline" disabled={isPending}>
+										No
+									</Button>
 								</AlertDialogCancel>
 								<AlertDialogAction asChild>
-									<Button variant="accept" onClick={form.handleSubmit(onSubmit, onError)}>
+									<Button variant="accept" onClick={form.handleSubmit(onSubmit, onError)} disabled={isPending}>
 										Si
 									</Button>
 								</AlertDialogAction>
@@ -135,7 +145,14 @@ const CreateCustomerModal = () => {
 								required
 								label="Tipo de documento"
 								options={options.documento}
-								onValueChange={field.onChange}
+								onValueChange={(value) => {
+									field.onChange(value); // Actualizar el tipo de documento en el formulario (2)
+									// Reseteamos los campos correspondientes al cambiar el tipo de documento (3)
+									resetField("identification_document_number");
+									resetField("business_name");
+									resetField("first_names");
+									resetField("last_names");
+								}}
 								{...field}
 							/>
 						</div>
@@ -147,7 +164,18 @@ const CreateCustomerModal = () => {
 					name="identification_document_number"
 					render={({ field }) => (
 						<div className="col-span-1">
-							<CosmosInput showLabel required type="text" label="Número de documento" {...field} />
+							<CosmosInput
+								showLabel
+								required
+								type="text"
+								label="Número de documento"
+								// Permitir solo números y restringir extensión (1,2)
+								maxLength={form.watch("identification_document_type") === "DNI" ? 8 : 11}
+								onInput={(e) => {
+									e.currentTarget.value = e.currentTarget.value.replace(/\D/g, "");
+								}}
+								{...field}
+							/>
 						</div>
 					)}
 				/>
@@ -255,7 +283,17 @@ const CreateCustomerModal = () => {
 					name="phone_number"
 					render={({ field }) => (
 						<div className="col-span-1">
-							<CosmosInput showLabel type="text" label="Nro. Celular" {...field} />
+							<CosmosInput
+								showLabel
+								type="text"
+								label="Nro. Celular"
+								// Permitir solo números y restringir extensión (1,2)
+								maxLength={9}
+								onInput={(e) => {
+									e.currentTarget.value = e.currentTarget.value.replace(/\D/g, "");
+								}}
+								{...field}
+							/>
 						</div>
 					)}
 				/>
