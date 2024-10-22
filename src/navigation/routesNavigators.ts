@@ -7,6 +7,7 @@ import {
 	SettingsIcon,
 	ShoppingCartIcon,
 	ViewInArIcon,
+	//Falta insertar iconos de guias y almacenes
 } from "@/components/icons";
 import type { LinkProps } from "@tanstack/react-router";
 

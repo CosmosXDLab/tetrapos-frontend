@@ -6,6 +6,7 @@ import {
 	SettingsIcon,
 	ShoppingCartIcon,
 	ViewInArIcon,
+	//Falta insertar iconos de guias y almacenes
 } from "@/components/icons";
 import type { LinkProps } from "@tanstack/react-router";
 
@@ -45,6 +46,21 @@ const routesNavigators: RoutesNavigators[] = [
 		name: "Diario de Caja",
 		icon: LockClockIcon,
 		path: "/cash-journals",
+	},
+	{
+		name: "Guias",
+		icon: DashboardIcon,
+		path: "/guides",
+	},
+	{
+		name: "Almacenes",
+		icon: DashboardIcon,
+		path: "/warehouses",
+	},
+	{
+		name: "Transportistas",
+		icon: PeopleIcon,
+		path: "/carriers",
 	},
 	{
 		name: "Configuración",
